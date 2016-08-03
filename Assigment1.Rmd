@@ -1,0 +1,26 @@
+---
+title: "STAT3040 Assignment 1"
+author: "Benjamin G. Moran, c3076448@uon.edu.au"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    includes: 
+      before_body: eqnnumber.js
+    mathjax: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+**Due:** 5pm Tuesday 9th August 2016.
+
+
+***
+1. In general, if two random variables are **uncorrelated**, they **may** or **may not** be **independent**.
+
+    Show that if two random variables $X \sim N[\mu_X, \sigma^2_X]$ and $Y \sim N[\mu_Y, \sigma^2_Y]$ are **uncorrelated**, then they are **independent** as well.
+
+***
+
+2. Show that the **joint pdf** of a **Multivariate Normal** distribution with $n = 2$ can be simplified to the **joint pdf** of a **Bivariate Normal** distribution.
