@@ -1,0 +1,102 @@
+---
+title: 'Assignment 1: R Coding'
+author: "Benjamin G. Moran, c3076448@uon.edu.au"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    includes: 
+      before_body: eqnnumber.js
+    mathjax: default
+---
+***
+1. Define the $1000 × 2$ matrix $z$.
+
+```{r Question 1}
+z <- matrix(nrow = 1000, ncol = 2)
+summary(z)
+```
+***
+2. Generate two sets of $1000$ Standard Normal random variates by using equations $z1$ and $z2$ given
+in item $20$ and store each of them in one column of matrix $z$.
+
+```{r Question 2, results='hide'}
+set.seed(2936)
+u1 <- runif(1000,0,1)
+u2 <- runif(1000,0,1)
+z1 = sqrt(-2*log(u1))*cos(2*pi*u2)
+z2 = sqrt(-2*log(u1))*sin(2*pi*u2)
+
+z[,1] <- z1
+z[,2] <- z2
+  
+```
+
+```{r Question 2 Output}
+summary(z)
+```
+***
+3. Test, statistically, if each column of matrix $z$ is normally distributed at the significance level of
+$5\%$.
+```{r Normality Test}
+normtest.z1 <- broom::tidy(shapiro.test(z[,1]))
+normtest.z2 <- broom::tidy(shapiro.test(z[,2]))
+```
+
+```{r, echo=FALSE}
+z1.p <- normtest.z1$p.value
+if(z1.p > 0.05) {
+  print(paste("z1 p-value =", z1.p, " - therefore, z1 is normally distributed"))
+} else{
+    print(paste("z1 p-value =", z1.p, " - therefore, z1 is not normally distributed"))
+  }
+z2.p <- normtest.z2$p.value
+if(normtest.z2$p.value > 0.05) {
+  print(paste("z2 p-value =", z2.p, " - therefore, z2 is normally distributed"))
+} else{
+    print(paste("z2 p-value =", z2.p, " - therefore, z2 is not normally distributed"))
+  }
+```
+***
+4. Test, statistically, if two columns of matrix $z$ are uncorrelated at the significance level of $5\%$.
+```{r Correlation Test}
+cortest.z <- broom::tidy(cor.test(z[,1],z[,2]))
+cortest.z$p.value
+```
+***
+5. Store both columns of matrix $z$ in a long vector, say $v$.
+
+```{r}
+v <- c(z[,1], z[,2])
+summary(v)
+length(v)
+
+```
+***
+6. Find the average and variance of the generated data in $v$.
+
+```{r}
+mean(v)
+var(v)
+```
+***
+7. Define a new vector   $w = 2v + 5$. Show, numerically, that the average of the sample data in $w$ is equal to two time the average of the sample data in $v + 5$, and the variance of the sample data in $w$ is four times the variance of the sample data in $v$.
+
+```{r }
+w <-  2*v + 5
+summary(w)
+
+avg.w <- mean(w)
+avg.v <- mean(v)
+
+diff.avg <- 2*avg.v + 5 - avg.w
+
+diff.avg
+
+var.w <- var(w)
+var.v <- var(v)
+
+diff.var <- 4*var.v - var.w
+
+diff.var
+
+```

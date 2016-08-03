@@ -1,0 +1,184 @@
+---
+title: "Lab1"
+author: "Benjamin Moran"
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r setup, include = FALSE}
+```
+##Introduction to R
+
+1. Help:
+
+```{r 1, eval = FALSE} 
+help(boxplot) 
+
+#or 
+
+?boxplot
+```
+
+2. Comment:
+
+```{r 2, eval = FALSE}
+# Your comment . . .
+```
+
+3. Get the current working directory:
+
+```{r 3}
+getwd()
+```
+
+4. Change the current working directory:
+
+```{r 4, eval = FALSE}
+setwd("c:/")
+```
+
+5. Define a variable:
+
+```{r 5}
+a <- 10 
+
+#or
+
+a = 10
+```
+
+6. Define a vector:
+
+```{r 6} 
+ID <- c(11, 12, 13, 14, 15) 
+G <- c(81, 53, 66, 72, 68) 
+
+#‘c’ stands for ‘concatenate’.
+```
+
+7. View the of elements of a vector:
+
+```{r 7}
+ID
+ID[2:4]
+ID[-2]
+```
+
+8. Find the number of elements in a vector:
+
+```{r 8}
+length(ID)
+```
+
+9. Find the summation, average, variance, minimum and maximum of a vector:
+
+```{r 9}
+sum(G)
+mean(G)
+var(G)
+min(G)
+max(G)
+```
+
+10. Combine variables/vectors:
+
+```{r 10}
+IDG <- c(ID,G)
+CL1 <- cbind(ID,G)
+CL2 <- rbind(ID,G)
+
+CL1
+CL2
+```
+
+11. Construct a matrix with predetermined dimensions:
+
+```{r}
+CL <- matrix(nrow=5, ncol=2)
+CL[,1] <- ID
+CL[,2] <- G
+colnames(CL) <- c("ID", "Grades")
+```
+
+12. Find the dimension of a matrix:
+
+```{r}
+dim(CL)
+```
+
+13. Construct a vector with repeated elements:
+
+```{r}
+GG1 <- rep(G, 3)
+GG2 <- rep(G, each=3)
+
+GG1
+GG2
+```
+
+14. Construct a vector with a sequence of elements:
+
+```{r} 
+b <- seq(from=1, to=10, by=2)
+
+b
+```
+
+15. Remove a variable:
+
+```{r}
+rm(b)
+exists("b")
+
+```
+
+16. Working with Normal distribution:
+
+```{r}
+dnorm(0, mean = 0, sd = 1)
+pnorm(1.96, mean = 0, sd = 1)
+qnorm(0.975, mean = 0, sd = 1)
+SND <- rnorm(100, mean = 0, sd = 1)
+
+SND
+```
+
+17. Shapiro Normality test:
+
+```{r}
+shapiro.test(SND)
+```
+
+18. Test of correlation:
+
+```{r}
+SND2 <- rnorm(100, mean = 0, sd = 1)
+cor.test(SND,SND2)
+```
+
+19. Change the seed number:
+
+```{r}
+set.seed(164)
+rnorm(1, 0, 1)
+rnorm(1, 0, 1)
+set.seed(164)
+rnorm(1, 0, 1)
+```
+
+20. Generate Standard Normal random variate:
+
+```{r}
+u1 <- runif(10,0,1)
+u2 <- runif(10,0,1)
+z1 = sqrt(-2*log(u1))*cos(2*pi*u2)
+z2 = sqrt(-2*log(u1))*sin(2*pi*u2)
+
+z1
+z2
+```
+
+21. Close R:
+
+```{r, eval=FALSE}
+q()
+```
