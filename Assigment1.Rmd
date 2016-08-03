@@ -17,6 +17,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ***
+$$f_X(x)=\frac{1}{\sqrt{(2\pi)^n|\boldsymbol\Gamma|}}
+\exp\left(-\frac{1}{2}({x}-{\mu_X})^T{\boldsymbol\Gamma}^{-1}({x}-{\mu_X})
+\right)$$
+
 1. In general, if two random variables are **uncorrelated**, they **may** or **may not** be **independent**.
 
     Show that if two random variables $X \sim N[\mu_X, \sigma^2_X]$ and $Y \sim N[\mu_Y, \sigma^2_Y]$ are **uncorrelated**, then they are **independent** as well.
