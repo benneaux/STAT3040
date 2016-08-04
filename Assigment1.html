@@ -127,7 +127,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">STAT3040 Assignment 1</h1>
 <h4 class="author"><em>Benjamin G. Moran, <a href="mailto:c3076448@uon.edu.au">c3076448@uon.edu.au</a></em></h4>
-<h4 class="date"><em>03 August, 2016</em></h4>
+<h4 class="date"><em>04 August, 2016</em></h4>
 
 </div>
 
@@ -139,11 +139,27 @@ $(document).ready(function () {
 \right)\]</span></p>
 <ol style="list-style-type: decimal">
 <li><p>In general, if two random variables are <strong>uncorrelated</strong>, they <strong>may</strong> or <strong>may not</strong> be <strong>independent</strong>.</p>
-<p>Show that if two random variables <span class="math">\(X \sim N[\mu_X, \sigma^2_X]\)</span> and <span class="math">\(Y \sim N[\mu_Y, \sigma^2_Y]\)</span> are <strong>uncorrelated</strong>, then they are <strong>independent</strong> as well.</p></li>
+<p>Show that if two random variables <span class="math">\(X \sim N[\mu_X, \sigma^2_X]\)</span> and <span class="math">\(Y \sim N[\mu_Y, \sigma^2_Y]\)</span> are <strong>uncorrelated</strong>, then they are <strong>independent</strong> as well.</p>
+<p><strong>Answer:</strong> If two random variables <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> are uncorrelated, then the following is true: <span class="math">\[\rho_{XY}(X,Y) = \frac{COV(X,Y)}{\sigma_X\sigma_Y} = 0\]</span> The joint distribution of two Normal random variables <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> is given by: <span class="math">\[f_{XY}(x,y)=\frac{1}{2 \pi \sigma_X \sigma_Y \sqrt{1-\rho^2}}
+\exp\left\{-\frac{1}{2(1-\rho^2)} \left( \frac{(x-\mu_X)^2}{\sigma_X^2} - \frac{2\rho(x-\mu_X)(y-\mu_Y)}{\sigma_X\sigma_Y} + \frac{(y-\mu_Y)^2}{\sigma^2_Y}
+\right) \right\} \]</span> If we sub in <span class="math">\(\rho = 0\)</span> into this distribution, we get the following: <span class="math">\[\begin{align} f_{XY}(x,y)&amp;=\frac{1}{2 \pi \sigma_X \sigma_Y}
+\exp\left\{-\frac{1}{2} \left( \frac{(x-\mu_X)^2}{\sigma_X^2} + \frac{(y-\mu_Y)^2}{\sigma^2_Y}
+\right) \right\} \\ &amp;=\frac{1}{\sqrt{2 \pi \sigma^2_X}}
+\exp\left\{-\frac{1}{2} \left( \frac{(x-\mu_X)^2}{\sigma_X^2}\right) \right\} +\frac{1}{\sqrt{2 \pi \sigma^2_Y}}\exp\left\{-\frac{1}{2} \left( \frac{(y-\mu_Y)^2}{\sigma_Y^2}\right) \right\} \\
+ &amp;= f_X(x)f_Y(y)
+ \end{align}\]</span> This shows that the joint pdf of <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> - <span class="math">\(f_{XY}(x,y)\)</span> - is equal to the product of the marginal pdfs of <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> - <span class="math">\(f_X(x)f_Y(y)\)</span>. Therefore, the two variables are independent.</p></li>
 </ol>
 <hr />
 <ol start="2" style="list-style-type: decimal">
-<li>Show that the <strong>joint pdf</strong> of a <strong>Multivariate Normal</strong> distribution with <span class="math">\(n = 2\)</span> can be simplified to the <strong>joint pdf</strong> of a <strong>Bivariate Normal</strong> distribution.</li>
+<li><p>Show that the <strong>joint pdf</strong> of a <strong>Multivariate Normal</strong> distribution with <span class="math">\(n = 2\)</span> can be simplified to the <strong>joint pdf</strong> of a <strong>Bivariate Normal</strong> distribution.</p>
+<p><strong>Answer:</strong> The joint pdf of a Multivariate Normal distribution is given by: <span class="math">\[f_X(x)=\frac{1}{\sqrt{(2\pi)^n|\boldsymbol\Gamma|}}\exp\left(-\frac{1}{2}({x}-{\mu_X})^T{\boldsymbol\Gamma}^{-1}({x}-{\mu_X})
+\right),\]</span> where <span class="math">\(X:= (X_1, X_2, ..., X_n)'\)</span>, <span class="math">\(x:=(x_1, x_2, ..., x_n)'\)</span> and <span class="math">\(\mu:= (\mu_1, \mu_2, ..., \mu_n)'\)</span>. When <span class="math">\(n=2\)</span>, the Covariance Matrix <span class="math">\(\Gamma\)</span> is given by: <span class="math">\[\begin{align} \Gamma &amp;= \begin{bmatrix} \sigma^2_{X_1} &amp; \rho\sigma_{X_1}\sigma_{X_2} \\ \rho\sigma_{X_1}\sigma_{X_2} &amp;  \sigma^2_{X_2} \end{bmatrix} \\
+\implies \Gamma^{-1} &amp;= \frac{1}{\sigma^2_{X_1}\sigma^2_{X_2}(1-\rho^2)} \begin{bmatrix} \sigma^2_{X_2} &amp; -\rho\sigma_{X_1}\sigma_{X_2} \\ -\rho\sigma_{X_1}\sigma_{X_2} &amp;  \sigma^2_{X_1} \end{bmatrix} \\
+&amp;= \frac{1}{(1-\rho^2)}\begin{bmatrix} \frac{1}{\sigma^2_{X_1}} &amp; -\frac{\rho}{\sigma_{X_1}\sigma_{X_2}} \\ -\frac{\rho}{\sigma_{X_1}\sigma_{X_2}} &amp;  \frac{1}{\sigma^2_{X_2}} \end{bmatrix}\\
+\implies det(\Gamma) &amp;= \sigma^2_{X_1}\sigma^2_{X_2}(1-\rho^2)
+\end{align}\]</span> If we sub these values into the joint pdf of the Multivariate Normal distribution with <span class="math">\(n=2\)</span>, we get: <span class="math">\[\begin{align} f_X(x) &amp;=\frac{1}{2\pi \sqrt{\sigma^2_{X_1}\sigma^2_{X_2}(1-\rho^2)}} \\ &amp; \times \exp \left\{- \frac{1} {2(1-\rho^2)} \left( \begin{pmatrix} x_1 - \mu_{X_1} \\ x_2 - \mu_{X_2} \end{pmatrix}^T  \begin{bmatrix} \frac{1}{\sigma^2_{X_1}} &amp; -\frac{\rho}{\sigma_{X_1}\sigma_{X_2}} \\ -\frac{\rho}{\sigma_{X_1}\sigma_{X_2}} &amp;  \frac{1}{\sigma^2_{X_2}} \end{bmatrix} \begin{pmatrix} x_1 - \mu_{X_1} \\ x_2 - \mu_{X_2} \end{pmatrix}\right) \right\} \\ &amp;= \frac{1}{2\pi\sigma_{X_1}\sigma_{X_2}\sqrt{1-\rho^2}}\exp\left\{-\frac{1}{2(1-\rho^2)} \left( \frac{(x_1-\mu_{X_2})^2}{\sigma_{X_1}^2} - \frac{2\rho(x_1-\mu_{X_1})(x_2-\mu_{X_2})}{\sigma_{X_1}\sigma_{X_2}} + \frac{(x_2-\mu_{X_2})^2}{\sigma^2_{X_2}}\right) \right\} \end{align},\]</span> which is equivalent to the bivariate Normal Distribution stated in Question 1.</p></li>
+<li><p><strong>Bonus Question</strong> Consider to random variables <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> with a completely <strong>linear</strong> relationship, that is <span class="math">\[Y = aX + b,\]</span> for constants <span class="math">\(a,b \in \mathbb R\)</span> and <span class="math">\(a \neq 0\)</span>. Show that if <span class="math">\(a&gt;0\)</span>, then <span class="math">\(\rho(X,Y) = 1\)</span> and if <span class="math">\(a&lt;0\)</span>, then <span class="math">\(\rho(X,Y) = -1\)</span>.</p>
+<p><strong>Answer</strong>. We know that <span class="math">\(\rho(X,Y) = \frac{COV(X,Y)}{\sigma_X\sigma_Y}\)</span> and that <span class="math">\(COV(X,Y) = E[XY] - E[X]E[Y]\)</span>. Now let’s determine every value for <span class="math">\(Y\)</span> in terms of <span class="math">\(X\)</span> via the linear relationship given in the question. <span class="math">\[\begin{align} E[Y] &amp;= E[aX +b] = aE[X] + b \\ \implies E[X]E[Y] &amp;= E[X](aE[X] + b) = aE[X]^2 + bE[X] \\ E[XY] &amp;= E[X(aX + b)] = E[aX^2 + bX] = aE[X^2] + bE[X] \\ Var(Y) &amp;= E[Y^2] - E[Y]^2 = E[(aX + b)^2] - E[aX + b]^2 \\ &amp;= a^2E[X^2]+2abE[X] + b^2 - \left(aE[X] + b\right)^2 \\ &amp;= a^2E[X^2]+2abE[X] + b^2 - a^2E[X]^2 - 2abE[X] - b^2 \\ &amp;= a^2\sigma^2_X \\ \implies \sigma_Y &amp;= \|a\sigma_X\| \end{align}\]</span> Now we can rewrite the covariance term as: <span class="math">\[\begin{align} COV(X,Y) &amp;= aE[X^2] + bE[X] - \left(aE[X]^2 + bE[X]\right) \\ &amp;= aE[X^2] + bE[X] - aE[X]^2 - bE[X] \\ &amp;= aE[X^2] - aE[X]^2 \\ &amp;= a\sigma^2_X\end{align}\]</span> Now, if we sub both of these values into the Correlation equation given earlier, we get: <span class="math">\[\begin{align} \rho(X,Y) &amp;= \frac{a\sigma^2_X}{\|a\sigma_X^2\|} \\ &amp;= \frac{a}{\|a\|} \end{align},\]</span> which, when <span class="math">\(a&gt;0\)</span> will result in <span class="math">\(\rho(X,Y) = 1\)</span> but when <span class="math">\(a&lt;0\)</span>, <span class="math">\(\rho(X,Y) = -1\)</span>.</p></li>
 </ol>
 
 
