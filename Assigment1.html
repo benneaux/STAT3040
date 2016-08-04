@@ -134,13 +134,10 @@ $(document).ready(function () {
 
 <p><strong>Due:</strong> 5pm Tuesday 9th August 2016.</p>
 <hr />
-<p><span class="math">\[f_X(x)=\frac{1}{\sqrt{(2\pi)^n|\boldsymbol\Gamma|}}
-\exp\left(-\frac{1}{2}({x}-{\mu_X})^T{\boldsymbol\Gamma}^{-1}({x}-{\mu_X})
-\right)\]</span></p>
 <ol style="list-style-type: decimal">
 <li><p>In general, if two random variables are <strong>uncorrelated</strong>, they <strong>may</strong> or <strong>may not</strong> be <strong>independent</strong>.</p>
 <p>Show that if two random variables <span class="math">\(X \sim N[\mu_X, \sigma^2_X]\)</span> and <span class="math">\(Y \sim N[\mu_Y, \sigma^2_Y]\)</span> are <strong>uncorrelated</strong>, then they are <strong>independent</strong> as well.</p>
-<p><strong>Answer:</strong> If two random variables <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> are uncorrelated, then the following is true: <span class="math">\[\rho_{XY}(X,Y) = \frac{COV(X,Y)}{\sigma_X\sigma_Y} = 0\]</span> The joint distribution of two Normal random variables <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> is given by: <span class="math">\[f_{XY}(x,y)=\frac{1}{2 \pi \sigma_X \sigma_Y \sqrt{1-\rho^2}}
+<p><strong>Answer:</strong> If two random variables <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> are uncorrelated, then the following is true: <span class="math">\[\rho_{XY}(X,Y) = \frac{COV(X,Y)}{\sigma_X\sigma_Y} = 0\]</span>. The joint distribution of two Normal random variables <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> is given by: <span class="math">\[f_{XY}(x,y)=\frac{1}{2 \pi \sigma_X \sigma_Y \sqrt{1-\rho^2}}
 \exp\left\{-\frac{1}{2(1-\rho^2)} \left( \frac{(x-\mu_X)^2}{\sigma_X^2} - \frac{2\rho(x-\mu_X)(y-\mu_Y)}{\sigma_X\sigma_Y} + \frac{(y-\mu_Y)^2}{\sigma^2_Y}
 \right) \right\} \]</span> If we sub in <span class="math">\(\rho = 0\)</span> into this distribution, we get the following: <span class="math">\[\begin{align} f_{XY}(x,y)&amp;=\frac{1}{2 \pi \sigma_X \sigma_Y}
 \exp\left\{-\frac{1}{2} \left( \frac{(x-\mu_X)^2}{\sigma_X^2} + \frac{(y-\mu_Y)^2}{\sigma^2_Y}

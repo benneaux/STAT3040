@@ -127,7 +127,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Assignment 1: R Coding</h1>
 <h4 class="author"><em>Benjamin G. Moran, <a href="mailto:c3076448@uon.edu.au">c3076448@uon.edu.au</a></em></h4>
-<h4 class="date"><em>03 August, 2016</em></h4>
+<h4 class="date"><em>04 August, 2016</em></h4>
 
 </div>
 
@@ -167,7 +167,19 @@ z[,2] &lt;- z2</code></pre>
 </ol>
 <pre class="r"><code>normtest.z1 &lt;- broom::tidy(shapiro.test(z[,1]))
 normtest.z2 &lt;- broom::tidy(shapiro.test(z[,2]))</code></pre>
+<pre class="r"><code>z1.p &lt;- normtest.z1$p.value
+if(z1.p &gt; 0.05) {
+  print(paste(&quot;z1 p-value =&quot;, z1.p, &quot; - therefore, z1 is normally distributed&quot;))
+} else{
+    print(paste(&quot;z1 p-value =&quot;, z1.p, &quot; - therefore, z1 is not normally distributed&quot;))
+  }</code></pre>
 <pre><code>## [1] &quot;z1 p-value = 0.652541327742469  - therefore, z1 is normally distributed&quot;</code></pre>
+<pre class="r"><code>z2.p &lt;- normtest.z2$p.value
+if(normtest.z2$p.value &gt; 0.05) {
+  print(paste(&quot;z2 p-value =&quot;, z2.p, &quot; - therefore, z2 is normally distributed&quot;))
+} else{
+    print(paste(&quot;z2 p-value =&quot;, z2.p, &quot; - therefore, z2 is not normally distributed&quot;))
+  }</code></pre>
 <pre><code>## [1] &quot;z2 p-value = 0.217697573484182  - therefore, z2 is normally distributed&quot;</code></pre>
 <hr />
 <ol start="4" style="list-style-type: decimal">

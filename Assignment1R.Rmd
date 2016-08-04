@@ -42,7 +42,7 @@ normtest.z1 <- broom::tidy(shapiro.test(z[,1]))
 normtest.z2 <- broom::tidy(shapiro.test(z[,2]))
 ```
 
-```{r, echo=FALSE}
+```{r}
 z1.p <- normtest.z1$p.value
 if(z1.p > 0.05) {
   print(paste("z1 p-value =", z1.p, " - therefore, z1 is normally distributed"))

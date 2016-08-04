@@ -1,10 +1,11 @@
 ---
 title: "STAT3040 Assignment 1"
 author: "Benjamin G. Moran, c3076448@uon.edu.au"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: 
+date: 
+output:
+  pdf_document: default
   html_document:
-    includes: 
+    includes:
       before_body: eqnnumber.js
     mathjax: default
 ---
@@ -17,16 +18,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ***
-$$f_X(x)=\frac{1}{\sqrt{(2\pi)^n|\boldsymbol\Gamma|}}
-\exp\left(-\frac{1}{2}({x}-{\mu_X})^T{\boldsymbol\Gamma}^{-1}({x}-{\mu_X})
-\right)$$
-
 1. In general, if two random variables are **uncorrelated**, they **may** or **may not** be **independent**.
 
     Show that if two random variables $X \sim N[\mu_X, \sigma^2_X]$ and $Y \sim N[\mu_Y, \sigma^2_Y]$ are **uncorrelated**, then they are **independent** as well.
     
     **Answer:** If two random variables $X$ and $Y$ are uncorrelated, then the following is true:
-$$\rho_{XY}(X,Y) = \frac{COV(X,Y)}{\sigma_X\sigma_Y} = 0$$
+$$\rho_{XY}(X,Y) = \frac{COV(X,Y)}{\sigma_X\sigma_Y} = 0$$.
 The joint distribution of two Normal random variables $X$ and $Y$ is given by: 
 $$f_{XY}(x,y)=\frac{1}{2 \pi \sigma_X \sigma_Y \sqrt{1-\rho^2}}
 \exp\left\{-\frac{1}{2(1-\rho^2)} \left( \frac{(x-\mu_X)^2}{\sigma_X^2} - \frac{2\rho(x-\mu_X)(y-\mu_Y)}{\sigma_X\sigma_Y} + \frac{(y-\mu_Y)^2}{\sigma^2_Y}
