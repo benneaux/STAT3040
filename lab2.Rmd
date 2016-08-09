@@ -1,0 +1,75 @@
+---
+title: "Lab2"
+author: "B. Moran"
+date: "9 August 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Computer Lab. 2 {Week 3}
+
+
+###1	Problems
+
+
+1.	Question 1 - Assignment 1.
+
+2.	Question 2 - Assignment 1.
+
+3.	Bonus Question - Assignment 1.
+
+
+###2	Random Variate Generation in R
+
+
+1.	Congruence relationship $\implies a \equiv  b (\text{mod } n)$:
+```{r congruence}
+10 %% 3
+```
+
+2.	What is a random number?
+
+3.	Change the seed number: 
+```{r change seed}
+set.seed(164) 
+runif(1, 0, 1) 
+runif(1, 0, 1) 
+set.seed(164) 
+runif(1, 0, 1)
+
+```
+
+4.	What is a random variate?
+
+5.	Let $X$ be a continuous random variable with the CDF $F_X(x)$. If we define the random variable $Y := F_X(X)$, show that $Y$ has the Uniform distribution over interval $[0, 1]$.
+
+6.	Random variate generation from the Exponential distribution:
+```{r exponential}
+
+Sample <- -1/2*log(1-runif(1000,0,1)) 
+M <- mean(Sample)
+
+M
+```
+
+7.	Plot histogram: 
+```{r plot}
+hist(Sample)
+```
+
+8.	Kolmogorov-Smirnov goodness-of- t test: 
+```{r gof}
+ks.test(Sample, "pexp", 1/M)
+```
+
+9.	How to generate random variates from distributions that the CDF can be calculated explicitly?
+
+10.	Let $R_1$ and $R_2$ be two independent random variables having the common Uniform distribution over interval $[0, 1]$. Then, two random variables $Z_1$ and $Z_2$ defined as
+$$\begin{aligned} Z_1 &:=	\sqrt{-2\log(R_1)}\cos(2\pi R_2) \\
+Z2 &:=	\sqrt{-2\log(R_1)}\sin(2\pi R_2 \end{aligned},$$
+
+are independent and identically distribution having the Standard Normal distribution.
+
