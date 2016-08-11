@@ -1,36 +1,6 @@
-
-# c3076448; Benjamin G. Moran.
+# Name: Benjamin G. Moran.
+# ID No.: c3076448
 # STAT3040 - R Assignment 1
-
-# I've used the broom package so that I can easily store the output from
-# correlation and normality tests as datasets (Lines 58, 64 & 111). This then 
-# makes it simple to recall things like p-values from those tests and print them
-# to the console, independent of the rest of the model output. The package is 
-# only 1.5Mb and I don't believe that it has many dependencies. 
-# Running Lines 7 - 27 will check to see if the package is already installed and
-# either load/install the package as required.
-
-required_packages <- c("broom")
-new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
-
-load_packages <- function(x) {
-  lapply(x,
-    FUN = function(x) {
-      do.call(
-        "require",
-        list(x)
-      )
-    }
-  )
-}
-
-if (length(new_packages)) {
-  install.packages(new_packages)
-  load_packages(required_packages)
-} else {
-  load_packages(required_packages)
-}
-
 
 # 1. Define the 1000 × 2 matrix z.
 
@@ -60,19 +30,11 @@ if (length(new_packages)) {
 
 # 3. Test, statistically, if each column of matrix z is normally distributed at the significance level of
 # 5%.
-  # Run the test and use broom to store output.
-  normtest.z1 <- broom::tidy(
-    shapiro.test(
-      z[,1]
-      )
-    )
+  # Run the test and store output.
+  normtest.z1 <- shapiro.test(z[,1])
   
-  normtest.z2 <- broom::tidy(
-    shapiro.test(
-      z[,2]
-      )
-    )
-
+  normtest.z2 <- shapiro.test(z[,2])
+  
   z1.p <- normtest.z1$p.value
   if(z1.p > 0.05) {
     print(
@@ -114,9 +76,7 @@ if (length(new_packages)) {
 ##  4. Test, statistically, if two columns of matrix $z$ are uncorrelated at the 
 ##  significance level of $5\%$.
   
-  cortest.z <- broom::tidy(
-    cor.test(z[,1],z[,2])
-    )
+  cortest.z <- cor.test(z[,1],z[,2])
   
   z.corr <- cortest.z$p.value
   if(cortest.z$p.value > 0.05) {
