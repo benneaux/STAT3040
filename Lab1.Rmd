@@ -75,6 +75,9 @@ length(ID)
 sum(G)
 mean(G)
 var(G)
+# for this course we want to calculate variance using n, not n-1. To fix this
+var.g <- var(G)*((length(G)-1)/length(G))
+var.g
 min(G)
 max(G)
 ```

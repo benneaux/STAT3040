@@ -1,0 +1,26 @@
+---
+title: "Assignment 2"
+author: "Benjamin Moran"
+date: "7 August 2016"
+output: html_document
+---
+
+***
+###Question 1
+Let $\left\{X_1, X_2, . . . , X_n\right\}$ be a stationary time series. Verify that the sample autocovariance function $\hat{\gamma}_X (h)$, defined on Slide 39, is a non-negative definite function.
+
+####Hint
+There are two simple elegant solutions to this question in the article 
+
+> A.I. McLeod and C. Jimen´ez, Nonnegative Definiteness of the Sample Autocovariance Function, The American Statistician, 38(4):297-298, 1984.
+
+Read those two methods carefully and rewrite one of them in your own wording. If you present a novel method different from those two, you will get bonus mark.
+
+***
+####Bonus Question
+It should be clear from the discussion that a strictly stationary, finite variance, time series is also stationary. However, the converse may or may not be true, in general. 
+
+  A time series $\left\{X_t; t = 0, \pm1, \pm2, . . .\right\}$ is said to be a Gaussian process, if the n-dimensional random vectors $X = (X_{t_1}, X_{t_2}, . . . , X_{t_n})$ 0, for every collection of time points $t_1, t_2, . . . , t_n$, and every positive integer n, have a Multivariate Normal distribution. 
+  
+  Show that if the time series $\left\{X_t; t = 0, \pm1, \pm2, . . .\right\}$ is a stationary Gaussian
+process, then it is strictly stationary, as well.
