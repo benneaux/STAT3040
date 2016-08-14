@@ -32,6 +32,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 2.	What is a random number?
 
+**Answer** a random number generated using $Unif[0,1]$
+
 3.	Change the seed number: 
 ```{r change seed}
 set.seed(164) 
@@ -43,6 +45,8 @@ runif(1, 0, 1)
 ```
 
 4.	What is a random variate?
+
+**Answer** 
 
 5.	Let $X$ be a continuous random variable with the CDF $F_X(x)$. If we define the random variable $Y := F_X(X)$, show that $Y$ has the Uniform distribution over interval $[0, 1]$.
 
@@ -57,7 +61,7 @@ M
 
 7.	Plot histogram: 
 ```{r plot}
-hist(Sample)
+hist(Sample, 50)
 ```
 
 8.	Kolmogorov-Smirnov goodness-of- t test: 
