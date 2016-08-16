@@ -1,0 +1,59 @@
+---
+title: "Assignment 2R"
+author: "Benjamin Moran"
+date: "16 August 2016"
+output: html_document
+---
+```{r setup, include = FALSE}
+require(astsa)
+require(ggplot2)
+```
+### Assignment 2: R Coding
+Submission: You should email your R-code to ‘Ali.Eshragh@newcastle.edu.au’ by Friday, August 26, 11:55pm. Write your full name and student ID No. on the top of your code and your file name must be your complete surname.
+
+The quarterly earnings per share for the U.S. company Johnson & Johnson, 1960-1984, are stored in the variable $jj$ from the R-package astsa. Write an R-code to address the following questions:
+
+#####1. How many data are stored in the variable jj?
+```{r Q1}
+length(jj)
+```
+
+#####2. What are the average and variance of the Johnson & Johnson quarterly earnings per share from 1960 to 1984?
+
+```{r Q2}
+mean(jj)
+var(jj)
+var(jj)*(length(jj)/(length(jj)-1))
+```
+
+#####3. Plot the time series of the Johnson & Johnson quarterly earnings per share from 1960 to 1984. The labels of the horizontal and vertical axes should be in bold-style with the titles ‘Quarterly Earnings per Share’ and ‘Time’, respectively.
+
+```{r Q3}
+plot.ts(
+  jj,
+  xlab=expression(
+    bold("Quarterly Earnings per Share")
+    ),
+  ylab=expression(
+    bold("Time")
+    ),
+  main="Johnson & Johnson Quarterly Earnings per Share: \n 1960 - 1984"
+  )
+
+```
+
+#####4. Plot the autocovariance function of this time series within 16 lags. The main title of this plot should be ‘Johnson & Johnson Quarterly Earnings per Share’.
+
+```{r Q4}
+
+acf(jj, 16, type=c("covariance"), main="Johnson & Johnson Quarterly Earnings per Share")
+
+acf(jj, 16, type=c("correlation"), main="Johnson & Johnson Quarterly Earnings per Share")
+
+acf(jj, 16, type=c("partial"), main="Johnson & Johnson Quarterly Earnings per Share")
+
+```
+
+####References
+R.H. Shumway and D.S. Stoffer, Time Series Analysis and Its Applications With R Examples,
+Springer, New York, 2010.

@@ -18,19 +18,18 @@ install.packages("astsa")
 ```
 5. Load the package:
 ```{r load_astsa}
-library(astsa)
+require(astsa)
 ```
 6. The yearly average global temperature deviations (1880-2009) in degrees centigrade:
-```{r gtem}
+```{r gtemp}
 gtemp
 ```
 7. Plot ‘gtemp’:
-```{r gtemp}
+```{r plotgtemp}
+
 plot(gtemp)
 
 plot(gtemp, type="o")
-
-?plot
 
 plot(gtemp, type="o", ylab="Global Temperature Deviations")
 
@@ -43,6 +42,16 @@ ylab=expression(bold(Global) ~ bold(Temperature) ~ bold(Deviations)))
 ```
 
 8. Save the plot.
+
+```{r saveplot, include = FALSE}
+
+plot(gtemp, type="o", main="Global Temperature Plot",
+ylab=expression(bold(Global) ~ bold(Temperature) ~ bold(Deviations)))
+dev.copy(png,'myplot.png')
+dev.off()
+
+```
+![This is the saved plot image](myplot.png)
 
 9. Set the Graphical Parameters:
 ```{r params}
