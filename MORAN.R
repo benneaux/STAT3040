@@ -1,8 +1,8 @@
-# Name: Benjamin G. Moran.
-# ID No.: c3076448
-# STAT3040 - R Assignment 1
+### Name: Benjamin G. Moran.
+### ID No.: c3076448
+### STAT3040 - R Assignment 1
 
-# 1. Define the 1000 × 2 matrix z.
+## 1. Define the 1000 × 2 matrix z.
 
   z <- matrix(
     nrow = 1000,
@@ -11,25 +11,26 @@
   
   summary(z)
 
-# 2. Generate two sets of 1000 Standard Normal random variates by using 
-#  equations z1 and z2 given in item 20 and store each of them in one 
-#  column of matrix z.
+## 2. Generate two sets of 1000 Standard Normal random variates by using 
+##    equations z1 and z2 given in item 20 and store each of them in one 
+##    column of matrix z.
 
   set.seed(2936)
   
   u1 <- runif(1000,0,1)
   u2 <- runif(1000,0,1)
   
-  z1 = sqrt(-2*log(u1))*cos(2*pi*u2)
-  z2 = sqrt(-2*log(u1))*sin(2*pi*u2)
+  z1 <-  sqrt(-2*log(u1))*cos(2*pi*u2)
+  z2 <-  sqrt(-2*log(u1))*sin(2*pi*u2)
 
   z[,1] <- z1
   z[,2] <- z2
 
   summary(z)
 
-# 3. Test, statistically, if each column of matrix z is normally distributed at the significance level of
-# 5%.
+## 3. Test, statistically, if each column of matrix z is normally distributed at
+##    the significance level of 5%.
+  
   # Run the test and store output.
   normtest.z1 <- shapiro.test(z[,1])
   
@@ -74,7 +75,7 @@
   }
   
 ##  4. Test, statistically, if two columns of matrix $z$ are uncorrelated at the 
-##  significance level of $5\%$.
+##  significance level of $5%$.
   
   cortest.z <- cor.test(z[,1],z[,2])
   
@@ -114,10 +115,10 @@
   mean(v)
   var(v)
   
-#  7. Define a new vector   $w = 2v + 5$. 
-#  Show, numerically, that the average of the sample data in $w$ is equal to 
-#  two times the average of the sample data in $v + 5$, and the variance of the 
-#  sample data in $w$ is four times the variance of the sample data in $v$.
+##  7. Define a new vector   $w = 2v + 5$. 
+##  Show, numerically, that the average of the sample data in $w$ is equal to 
+##  two times the average of the sample data in $v + 5$, and the variance of the 
+##  sample data in $w$ is four times the variance of the sample data in $v$.
 
   # Create the vector and print a short summary to show it exits.
     w <-  2*v + 5 

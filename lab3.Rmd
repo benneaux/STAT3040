@@ -1,0 +1,76 @@
+---
+title: "lab3"
+author: "Benjamin Moran"
+date: "16 August 2016"
+output: html_document
+---
+
+##R-Package: ASTSA
+1. Download the supplementary R-package provided by the authors of the main reference book:
+ASTSA: Applied Statistical Time Series Analysis.
+This package can be accessed for free from http://www.stat.pitt.edu/stoffer/tsa4/.
+2. Save the zipped package in a desired directory, say ‘C:/ASTSA’.
+3. Set the current working directory where the package has been saved:
+setwd("C:/ASTSA")
+4. Install the package:
+```{r install, eval=FALSE}
+install.packages("astsa")
+```
+5. Load the package:
+```{r load_astsa}
+library(astsa)
+```
+6. The yearly average global temperature deviations (1880-2009) in degrees centigrade:
+```{r gtem}
+gtemp
+```
+7. Plot ‘gtemp’:
+```{r gtemp}
+plot(gtemp)
+
+plot(gtemp, type="o")
+
+?plot
+
+plot(gtemp, type="o", ylab="Global Temperature Deviations")
+
+plot(gtemp, type="o", ylab=expression(Global~Temperature~Deviations))
+
+plot(gtemp, type="o", ylab=expression(bold(Global)~bold(Temperature)~bold(Deviations)))
+
+plot(gtemp, type="o", main="Global Temperature Plot",
+ylab=expression(bold(Global) ~ bold(Temperature) ~ bold(Deviations)))
+```
+
+8. Save the plot.
+
+9. Set the Graphical Parameters:
+```{r params}
+?par
+```
+
+10. Plot the SOI and Recruitment time series together:
+```{r plotsoi}
+par(mfrow = c(2,1))
+plot(soi, ylab="", xlab="", main="Southern Oscillation Index")
+plot(rec, ylab="", xlab="", main="Recruitment")
+par(mfrow = c(1,1))
+plot(gtemp, type="o", main="Global Temperature Plot",
+ylab=expression(bold(Global)~bold(Temperature)~bold(Deviations)))
+```
+
+11. Plotting ACF and CCF:
+```{r plotacf}
+par(mfrow = c(3,1))
+acf(soi, 48, main="Southern Oscillation Index")
+acf(rec, 48, main="Recruitment")
+ccf(soi,rec, main="SOI vs. Recruitment", ylab="CCF")
+```
+
+12. Plotting autocovariance and cross-covariance functions:
+```{r plotccf}
+par(mfrow = c(3,1))
+acf(soi, 48, type=c("covariance"), main="Southern Oscillation Index")
+acf(rec, 48, type=c("covariance"), main="Recruitment")
+ccf(soi,rec, type=c("covariance"), main="SOI vs. Recruitment", ylab="CCF")
+```
