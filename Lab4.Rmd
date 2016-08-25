@@ -1,0 +1,98 @@
+---
+title: "lab4"
+author: "B. Moran"
+date: "24 August 2016"
+output: 
+  html_document:
+    theme: flatly
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, highlight = TRUE)
+require(astsa)
+require(knitr)
+require(broom)
+```
+###Generating Synthetic Time Series in R
+
+1.	Create the vector $u = [1 2 3 4 5 6	7 8 9 ]'$:												
+```{r Q1}
+u <- seq(1,9, by =1)												
+```
+
+2.	Generate the moving average series $v_{t}$ according to $v_{t}	= \frac{1}{2}u_{t}+ \frac{1}{3}u_{t-1} + \frac{1}{}u_{t-2}$ for $t = 3, 4, \cdots ,9$:	
+```{r Q2}
+v <- filter(u, sides = 1, c(1/2, 1/3, 1/6), method = ("convolution"))	
+tidy(as.data.frame.ts(v))													
+v2 <- filter(u, sides = 1, c(1/2,1/3,1/6))												
+v2
+```
+
+3.	Generate the moving average series $w_{t}$	according to $w_{t}	= \frac{1}{2}u_{t+1} + \frac{1}{3}u_{t} + \frac{1}{}u_{t-1}$ for $t = 2, 3, \cdots ,8$:	
+```{r Q3}
+w <- filter(u, sides = 2, c(1/2,1/3,1/6), method = ("convolution")) 
+w
+w2 <- filter(u, c(1/2,1/3,1/6))
+w2
+```
+
+4.	What will happen if the length of filter is an even number? Run the following code and see the output:
+
+```{r Q4}
+x <- filter(u, rep(1,4))
+x
+```
+
+5.	Generate the autoregressive series yt according to $y_{t}	= -2y_{t-1} + 3y_{t-2} + u_{t}$ for $t = 1,2,\cdots ,9$	 with the initial values $y_{0} = -1$ and $y_{1} = 4$:
+
+```{r Q5}
+y <- filter(u, c(-2, 3), method = ("recursive"), init = c(-1,4))
+y
+```
+
+6.	Generate the autoregressive series zt according to $z_{t}	= -2z_{t-1} + 3z_{t-2} + u_{t}$ for $t = 1,2,\cdots ,9$ with the initial values $z_{0} = z_{1} = 0$:
+
+```{r Q6}
+z <- filter(u, c(-2, 3), method = ("recursive"), init = c(0,0)) 
+z
+z <- filter(u, c(-2, 3), method = ("recursive")) 
+z
+```
+
+7.	(a) Generate $n = 100$ observations from the autoregressive model
+
+$$X_{t} =	-0.9X_{t-2} + \mathcal{W}_{t}$$
+
+where $\mathcal{W}_{t}$ is Gaussian White Noise with $\sigma_\mathcal{W}^{2} = 1$.
+
+```{r Q7a}
+w = rnorm(100,0,1)
+x = filter(w, c(0,-0.9), method = "recursive")
+```
+
+(b) Next, generate the moving average series
+
+$$Y_{t} = \frac{X_{t} + X_{t-1} + X_{t-2} + X_{t-3}}{4}$$
+
+```{r Q7b}
+y = filter(x, sides = 1, rep(1/4,4))
+```
+
+(c)	Plot $X_{t}$ as a line and superimpose $Y_{t}$ as a dashed line. 
+
+```{r Q7c}
+plot(x, type="l")
+lines(y, lty = "dashed")
+```
+
+(d)	Plot the ACF of $X_{t}$ and $Y_{t}$ next to each other. 
+
+```{r Q7d}
+par(mfrow=c(2,1))
+acf(x)
+acf(y, na.action = na.pass)
+```
+
+####References
+
+R.H. Shumway and D.S. Sto er, Time Series Analysis and Its Applications With R Examples, Springer, New York, 2010.
