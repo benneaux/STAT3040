@@ -29,9 +29,9 @@ require(astsa)
   
   plot.ts(
     jj,
-    xlab=expression(
-      bold("Quarterly Earnings per Share")),
     ylab=expression(
+      bold("Quarterly Earnings per Share")),
+    xlab=expression(
           bold("Time")),
     main="Johnson & Johnson Quarterly Earnings per Share: \n 1960 - 1984"
     )
@@ -51,7 +51,7 @@ require(astsa)
 #       y=expression(bold("Time"))
 #       )) +
 #   scale_colour_gradient2_tableau() +
-#   guides(colour= guide_legend("Quarter")) +
+#   guides(colour= guide_legend("Quarter Change")) +
 #   theme_light()
 
 ##4. Plot the autocovariance function of this time series within 16 lags.

@@ -45,11 +45,11 @@ plot.ts(
 
 ggplot(fortify(jj), aes(Index,Data, colour = cycle(jj))) +
   geom_line(size=1.5) +
-  labs(list(title="Johnson & Johnson Quarterly Earnings per Share: \n 1960 - 1984",x=expression(bold("Quarterly Earnings per Share")),y=expression(
+  labs(list(title="Johnson & Johnson Quarterly Earnings per Share: \n 1960 - 1984",y=expression(bold("Quarterly Earnings per Share")),x=expression(
     bold("Time")
     ))) +
   scale_colour_gradient2_tableau() +
-  guides(colour= guide_legend("Quarter")) + 
+  guides(colour= guide_legend("Quarter Change")) + 
   theme_light()
 ```
 
