@@ -2,7 +2,7 @@
 title: "Assignment 2"
 author: "Benjamin Moran"
 date: "7 August 2016"
-output: html_document
+output: pdf_document
 ---
 
 ***
@@ -16,6 +16,15 @@ There are two simple elegant solutions to this question in the article
 
 Read those two methods carefully and rewrite one of them in your own wording. If you present a novel method different from those two, you will get bonus mark.
 
+**Answer:** Working from the first example. If we take the sample mean to be $\bar{x} = 0$ to simplify the problem without losing generalisation, we can define the auto-correlation matrix of $X_{t}$ by this process:
+
+If we define a vector $Z=[z_{1},z_{2},z_{3},...]$ as the vector of time-series sample data, then auto-correlation matrix of that data can be written as:
+$$C = Z'Z$$
+Now, we know that any matrix $Y$ is positive semi-definite if there exists no vector $\vec{u}$ such that  $u'Yu < 0$. Now we can prove that $C$ must be non-negative definite by contradiction. Suppose that the auto-correlation matrix $C$ is not non-negative definite. Then $\exists \vec{\alpha}: \alpha'C\alpha <0$.
+
+But we know we can rewrite the above equation as:
+$$(\alpha'C\alpha)=(\alpha'Z'Z\alpha)=(Z\alpha)'(Z\alpha)=\beta^{2}_{1}+\beta^{2}_{2}\cdots$$, where $\beta=Z\alpha$. Therefore, $Z'Z$ contains the inner-product of all the columns in $Z$. Also,  $\alpha'C\alpha$ must be a sum of squares and therefore $\alpha'C\alpha \geq 0$, which is a contradiction. We can extend this to any matrix that can be written in the form $\alpha'Z'Z\alpha$. So, by contradiction, we have shown that $C$ must be non-negative definite. It follows that $C_{n}$ must be the sum of {n} non-negative definite matrices, which is trivially non-negative definite. Therefore, sample autocovariance matrix - and by extension the sample auto-covariance function - must be non-negative definite.
+
 ***
 ####Bonus Question
 It should be clear from the discussion that a strictly stationary, finite variance, time series is also stationary. However, the converse may or may not be true, in general. 
@@ -24,3 +33,10 @@ It should be clear from the discussion that a strictly stationary, finite varian
   
   Show that if the time series $\left\{X_t; t = 0, \pm1, \pm2, . . .\right\}$ is a stationary Gaussian
 process, then it is strictly stationary, as well.
+
+**Answer:** We are given that the $\left\{X_t; t = 0, \pm1, \pm2, . . .\right\}$ is a weakly stationary time-series. Therefore, we know that $\mu_{t} = \mu \> \forall t \in \left\{ 0, \pm1, \pm2, . . . \right\}$. We also know that the autocovariance of the time-series depends only on the lag between any two time-points $\forall s,t \in \mathbb{Z} \implies \gamma(x_{s}, x_{t}) = \gamma(\mid s - t \mid)$. Therefore, we know that the mean and autocovariance are not dependent on time, only on the lag between time-points. Now, recall the Multivariate Normal Distribution from Assignment 1.
+$$f_X(x)=\frac{1}{\sqrt{(2\pi)^n|\boldsymbol\Gamma|}}\exp\left(-\frac{1}{2}({x}-{\mu})^T{\boldsymbol\Gamma}^{-1}({x}-{\mu})
+\right)$$
+It is clear here that neither $\mu$ or the covariance matrix $\Gamma$ depend on the time $t$. Therefore, all probability distributions of the Gaussian proces $X_{t}$ only depend on the lag between time points. By extension the CDFs
+$$Pr(X_{t_1} \leq c_{1}, \cdots , X_{t_n} \leq c_{n}) = Pr(X_{t_{1+h}} \leq c_{1}, \cdots , X_{t_{n+h}} \leq c_{n}),$$
+which - using the result on slide 27 of the Chapter 1 Lecture Notes - implies that $X_{t}$ is *strictly* stationary.
