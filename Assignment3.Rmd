@@ -1,0 +1,50 @@
+---
+title: "Assignment3"
+author: "Benjamin Moran"
+date: "30 August 2016"
+output: html_document
+---
+
+###Question 1
+Let us consider the $n \times 1$ **dependent vector** $\mathbf{X}$ and the $n \times k$ **observed matrix of independent variables** $Z$ as defined in Slide 10. We construct two **regression models** between $\mathbf{X}$ and $Z$ as follows:
+
+$$
+  \begin{cases}
+  \begin{aligned}
+    (i) \quad \mathbf{X} &= Z\beta_{1} + \mathcal{W}_{1} \\
+    (ii) \quad \mathbf{X} &= Z\beta_{2} + \mathcal{W}_{2}
+  \end{aligned}
+  \end{cases}
+$$
+
+where $\mathcal{W}_{1} \overset{iid}{\sim} N[0,\sigma_{1}^{2}]$ and $\mathcal{W}_{2} \overset{iid}{\sim} N[0,\sigma_{2}^{2}]$ are two **independent** series. If we define $\theta_{1}:=(\beta_{1}', \sigma_{1}^{2})'$ and $\theta_{2}:=(\beta_{2}', \sigma_{2}^{2})'$, show that the **Kullback-Leibler Divergence** between the joint pdf of $\mathbf{X}$ based on models *(i)* and *(ii)* is given as:
+
+$$
+  I(\theta_{1}; \theta_{2}) = \frac{1}{2}\left(\frac{\sigma_{1}^{2}}{\sigma_{2}^{2}} - log\left(\frac{\sigma_{1}^{2}}{\sigma_{2}^{2}}\right) - 1\right) + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{2n\sigma_{2}^{2}}
+$$
+
+**Answer:**
+
+***
+
+###Bonus Question
+
+We think of the measure **Kullback-Leibler Divergence** introduced in Slide 24 as
+measuring the **distance** between the two joint pdfs, characterized by the
+parameter values $\theta_{1}:=(\beta_{1}', \sigma_{1}^{2})'$ and $\theta_{2}:=(\beta_{2}', \sigma_{2}^{2})'$. Now, if the **true** value of the parameter vector is $\theta_{1}$, we argue that the **best** model would be one that **minimizes** the **distance** between the **theoretical** value and the **sample**, say $I(\theta_{1}; \widehat{\theta})$. Because $\theta_{1}$ will not be known, Hurvich and Tsai (1989) considered finding an **unbiased estimator** for $E_{1}[I(\beta_{1}, \sigma_{1}^{2}; \widehat{\beta}, \widehat{\sigma}^{2})]$, where
+
+$$
+  I(\beta_{1}, \sigma_{1}^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \frac{1}{2}\left(\frac{\sigma_{1}^{2}}{\widehat{\sigma}^{2}} - log\left(\frac{\sigma_{1}^{2}}{\widehat{\sigma}^{2}}\right) - 1\right) + \frac{(\beta_{1} - \widehat{\beta})'Z'Z(\beta_{1} - \widehat{\beta})}{2n\widehat{\sigma}^{2}}
+$$
+
+and $\beta$ is a $k \times 1$ regression parameter vector. Show that
+
+$$
+  E[I(\beta_{1}, \sigma_{1}^{2}; \widehat{\beta}, \widehat{\sigma}^{2})] = \frac{1}{2}\left(-log(\sigma_{1}^{2}) + E_{1}[log(\widehat{\sigma}^{2})] + \frac{n+k}{n-k-2} - 1\right).
+$$
+
+**Answer:**
+
+
+
+***
