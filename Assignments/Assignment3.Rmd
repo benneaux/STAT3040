@@ -11,16 +11,16 @@ Let us consider the $n \times 1$ **dependent vector** $\mathbf{X}$ and the $n \t
 $$
   \begin{cases}
   \begin{aligned}
-    (i) \quad \mathbf{X} &= Z\beta_{1} + \mathcal{W}_{1} \\
-    (ii) \quad \mathbf{X} &= Z\beta_{2} + \mathcal{W}_{2}
+    (i) \quad \mathbf{X} &= Z\beta_{1} + \pmb{\mathcal{W}}_{1} \\
+    (ii) \quad \mathbf{X} &= Z\beta_{2} + \pmb{\mathcal{W}}_{2}
   \end{aligned}
   \end{cases}
 $$
 
-where $\mathcal{W}_{1} \overset{iid}{\sim} N[0,\sigma_{1}^{2}]$ and $\mathcal{W}_{2} \overset{iid}{\sim} N[0,\sigma_{2}^{2}]$ are two **independent** series. If we define $\theta_{1}:=(\beta_{1}', \sigma_{1}^{2})'$ and $\theta_{2}:=(\beta_{2}', \sigma_{2}^{2})'$, show that the **Kullback-Leibler Divergence** between the joint pdf of $\mathbf{X}$ based on models *(i)* and *(ii)* is given as:
+where $\pmb{\mathcal{W}}_{1} \overset{iid}{\sim} N[0,\sigma_{1}^{2}]$ and $\pmb{\mathcal{W}}_{2} \overset{iid}{\sim} N[0,\sigma_{2}^{2}]$ are two **independent** series. If we define $\pmb{\theta}_{1}:=(\beta_{1}', \sigma_{1}^{2})'$ and $\pmb{\theta}_{2}:=(\beta_{2}', \sigma_{2}^{2})'$, show that the **Kullback-Leibler Divergence** between the joint pdf of $\mathbf{X}$ based on models *(i)* and *(ii)* is given as: 
 
 $$
-  I(\theta_{1}; \theta_{2}) = \frac{1}{2}\left(\frac{\sigma_{1}^{2}}{\sigma_{2}^{2}} - log\left(\frac{\sigma_{1}^{2}}{\sigma_{2}^{2}}\right) - 1\right) + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{2n\sigma_{2}^{2}}
+  I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) = \frac{1}{2}\left(\frac{\sigma_{1}^{2}}{\sigma_{2}^{2}} - log\left(\frac{\sigma_{1}^{2}}{\sigma_{2}^{2}}\right) - 1\right) + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{2n\sigma_{2}^{2}}
 $$
 
 **Answer:**
@@ -29,18 +29,16 @@ $$
 
 ###Bonus Question
 
-We think of the measure **Kullback-Leibler Divergence** introduced in Slide 24 as
-measuring the **distance** between the two joint pdfs, characterized by the
-parameter values $\theta_{1}:=(\beta_{1}', \sigma_{1}^{2})'$ and $\theta_{2}:=(\beta_{2}', \sigma_{2}^{2})'$. Now, if the **true** value of the parameter vector is $\theta_{1}$, we argue that the **best** model would be one that **minimizes** the **distance** between the **theoretical** value and the **sample**, say $I(\theta_{1}; \widehat{\theta})$. Because $\theta_{1}$ will not be known, Hurvich and Tsai (1989) considered finding an **unbiased estimator** for $E_{1}[I(\beta_{1}, \sigma_{1}^{2}; \widehat{\beta}, \widehat{\sigma}^{2})]$, where
+If the **true** value of the parameter vector is $\pmb{\theta} = (\beta', \sigma^{2})$ and the **estimated** value based on the **sample** is $\pmb{\widehat{\theta}} = (\widehat{\beta}', \widehat{ \sigma}^{2})'$, one may argue that the **best** model would be one that **minimizes** the **Kullback-Leibler distance** between the joint pdfs of **theoretical** value and the **sample** estimation, say $I(\pmb\theta; \pmb{\widehat{\theta}})$. Because $\pmb{\theta}$ will not be known, Hurvich and Tsai (1989) considered finding an **unbiased estimator** for $E_{ \pmb{\theta}}[I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2})]$, where
 
 $$
-  I(\beta_{1}, \sigma_{1}^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \frac{1}{2}\left(\frac{\sigma_{1}^{2}}{\widehat{\sigma}^{2}} - log\left(\frac{\sigma_{1}^{2}}{\widehat{\sigma}^{2}}\right) - 1\right) + \frac{(\beta_{1} - \widehat{\beta})'Z'Z(\beta_{1} - \widehat{\beta})}{2n\widehat{\sigma}^{2}}
+  I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \frac{1}{2}\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}} - log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) - 1\right) + \frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{2n\widehat{\sigma}^{2}}
 $$
 
-and $\beta$ is a $k \times 1$ regression parameter vector. Show that
+and $\beta$ and $\widehat{\beta}$ are $k \times 1$ regression parameter vector and its **estimation**, respectively. **Show** that
 
 $$
-  E[I(\beta_{1}, \sigma_{1}^{2}; \widehat{\beta}, \widehat{\sigma}^{2})] = \frac{1}{2}\left(-log(\sigma_{1}^{2}) + E_{1}[log(\widehat{\sigma}^{2})] + \frac{n+k}{n-k-2} - 1\right).
+  E_{\pmb{\theta}}[I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2})] = \frac{1}{2}\left(-log(\sigma^{2}) + E_{\pmb{\theta}}[log(\widehat{\sigma}^{2})] + \frac{n+k}{n-k-2} - 1\right).
 $$
 
 **Answer:**
