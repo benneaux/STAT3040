@@ -152,7 +152,7 @@ AIC(fit2)/152 - log(2*pi)
 ```
 
 
-
+ch ch
 
 
 ####References
