@@ -152,7 +152,14 @@ $(document).ready(function () {
   E_{\pmb{\theta}}[I(\beta_{1}, \sigma_{1}^{2}; \widehat{\beta}, \widehat{\sigma}^{2})] = \frac{1}{2}\left(-log(\sigma_{1}^{2}) + E_{1}[log(\widehat{\sigma}^{2})] + \frac{n+k}{n-k-2} - 1\right).
 \]</span></p>
 <p><strong>Answer:</strong> Expectation is a linear function, so we can rewrite the above as <span class="math">\[
-E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \frac{1}{2}E\left[\frac{\sigma^{2}}{\widehat{\sigma}^{2}} - log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) - 1 + \frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{n\widehat{\sigma}^{2}}\right]
+\begin{aligned}
+  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) &amp;= 
+    \frac{1}{2}E\left[\frac{\sigma^{2}}{\widehat{\sigma}^{2}} 
+    - log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) 
+    - 1 + 
+    \frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{n\widehat{\sigma}^{2}}\right] \\
+  &amp;=\frac{1}{2}\left(E\left[\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right] - E\left[log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right)\right] - E\left[1\right] + E\left[\frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{n\widehat{\sigma}^{2}}\right]\right)
+\end{aligned}
 \]</span></p>
 <p>From the reference text, we are given that: <span class="math">\[
 \begin{aligned}
@@ -161,14 +168,20 @@ E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \f
 \end{aligned}
 \]</span> We are also given that if <span class="math">\(x \sim \chi_{n}^{2} \implies E[(\frac{1}{x})] = \frac{1}{n-2}\)</span>. So: <span class="math">\[
 \begin{aligned}
- \frac{n\widehat{\sigma}^{2}}{\sigma_{1}^{2}} &amp;= n\left(\frac{\widehat{\sigma}^{2}}{\sigma_{1}^{2}}\right)\\
-  &amp;=n\left(\frac{\sigma_{1}^{2}}{\widehat{\sigma}^{2}}\right)^{-1} \\
-  \implies E\left[n\left(\frac{\widehat{\sigma}^{2}}{\sigma_{1}^{2}}\right)\right] &amp;= n*\left(\frac{1}{(n-k)-2}\right) \\
-  &amp;=\frac{n}{n-k-2}
+  E \left[\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right)\right] &amp;= n*\left(\frac{1}{(n-k)-2}\right) \\
+  &amp;= \frac{n}{n-k-2}
+\end{aligned}
+\]</span> <span class="math">\[
+\begin{aligned}
+  E \left[\frac{(\widehat{\beta} - \beta)'Z'Z(\widehat{\beta} - \beta)}{n\widehat{\sigma}^{2}}\right] &amp;= \frac{k}{n-k} \, \frac{n-k}{n-k-2} \\
+  &amp;= \frac{k}{n-k-2}
 \end{aligned}
 \]</span></p>
 <p>Taking the expectation of a scalar returns the scalar. So we can simplify the above as: <span class="math">\[
-  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \frac{1}{2}E\left[\frac{\sigma^{2}}{\widehat{\sigma}^{2}} - log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) - 1 + \frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{n\widehat{\sigma}^{2}}\right]
+\begin{aligned}
+  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) &amp;= \frac{1}{2}\left[\frac{n}{n-k-2} - log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) - 1 + \frac{k}{n-k-2}\right] \\
+  &amp;= \frac{1}{2}\left[- log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) + \frac{n + k}{n-k-2} - 1 \right]
+\end{aligned}
 \]</span></p>
 <hr />
 </div>

@@ -2,7 +2,7 @@
 title: "Assignment3"
 author: "Benjamin Moran"
 date: "30 August 2016"
-output: html_document
+output: pdf_document
 header-includes: \usepackage{amsmath} \usepackage{mathtools}
 ---
 
@@ -30,7 +30,7 @@ $$
 
 ###Bonus Question
 
-If the **true** value of the parameter vector is $\pmb{\theta} = (\beta', \sigma^{2})'$ and the **estimated** value based on the **sample** $\widehat{\pmb{\theta}} = (\widehat{\beta'}, \widehat{\sigma^{2}})'$, one may argue that the **best** model would be one that **minimizes** the **Kullback-Leibler distance** between the joint-pdfs of **theoretical** value and the **sample** estimation, say $I(\pmb{\theta}; \widehat{\pmb{\theta}})$. Because $\pmb{\theta}$ will not be known, Hurvich and Tsai (1989) considered finding an **unbiased estimator** for $E_{1}[I(\beta_{1}, \sigma_{1}^{2}; \widehat{\beta}, \widehat{\sigma}^{2})]$, where
+If the **true** value of the parameter vector is $\pmb{\theta} = (\beta', \sigma^{2})'$ and the **estimated** value based on the **sample** $\widehat{\pmb{\theta}} = (\widehat{\beta'}, \widehat{\sigma^{2}})'$, one may argue that the **best** model would be one that **minimizes** the **Kullback-Leibler distance** between the joint-pdfs of **theoretical** value and the **sample** estimation, say $I(\pmb{\theta}; \widehat{\pmb{\theta}})$. Because $\pmb{\theta}$ will not be known, Hurvich and Tsai (1989) considered finding an **unbiased estimator** for $E_{\pmb{\theta}}[I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2})]$, where
 
 $$
   I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \frac{1}{2}\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}} - log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) - 1\right) + \frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{2n\widehat{\sigma}^{2}}
@@ -39,35 +39,66 @@ $$
 and $\beta$ is a $k \times 1$ regression parameter vector. Show that
 
 $$
-  E_{\pmb{\theta}}[I(\beta_{1}, \sigma_{1}^{2}; \widehat{\beta}, \widehat{\sigma}^{2})] = \frac{1}{2}\left(-log(\sigma_{1}^{2}) + E_{1}[log(\widehat{\sigma}^{2})] + \frac{n+k}{n-k-2} - 1\right).
+  E_{\pmb{\theta}}[I(\beta_{1}, \sigma_{1}^{2}; \widehat{\beta}, \widehat{\sigma}^{2})] = \frac{1}{2}\left(-log(\sigma^{2}) + E_{\pmb{\theta}}[log(\widehat{\sigma}^{2})] + \frac{n+k}{n-k-2} - 1\right).
 $$
 
 **Answer:** Expectation is a linear function, so we can rewrite the above as 
 $$
-E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \frac{1}{2}E\left[\frac{\sigma^{2}}{\widehat{\sigma}^{2}} - log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) - 1 + \frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{n\widehat{\sigma}^{2}}\right]
+\begin{aligned}
+  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) &= 
+    \frac{1}{2}E\left[\frac{\sigma^{2}}{\widehat{\sigma}^{2}} 
+    - log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) 
+    - 1 + 
+    \frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{n\widehat{\sigma}^{2}}\right] \\
+  &=\frac{1}{2}\left(E\left[\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right] - E\left[log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right)\right] - E\left[1\right] + E\left[\frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{n\widehat{\sigma}^{2}}\right]\right)
+\end{aligned}
 $$
 
 From the reference text, we are given that:
 $$
 \begin{aligned}
-  \frac{n\widehat{\sigma}^{2}}{\sigma_{1}^{2}} &\sim \chi_{n-k}^{2} \\
+  \frac{n\widehat{\sigma}^{2}}{\sigma^{2}} &\sim \chi_{n-k}^{2} \\
   \frac{(\widehat{\beta} - \beta)'Z'Z(\widehat{\beta} - \beta)}{n\widehat{\sigma}^{2}} &\sim \chi_{k}^{2}
 \end{aligned}
 $$
 We are also given that if $x \sim \chi_{n}^{2} \implies E[(\frac{1}{x})] = \frac{1}{n-2}$. So:
 $$
 \begin{aligned}
- \frac{n\widehat{\sigma}^{2}}{\sigma_{1}^{2}} &= n\left(\frac{\widehat{\sigma}^{2}}{\sigma_{1}^{2}}\right)\\
-  &=n\left(\frac{\sigma_{1}^{2}}{\widehat{\sigma}^{2}}\right)^{-1} \\
-  \implies E\left[n\left(\frac{\widehat{\sigma}^{2}}{\sigma_{1}^{2}}\right)\right] &= n*\left(\frac{1}{(n-k)-2}\right) \\
-  &=\frac{n}{n-k-2}
+  E \left[\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right)\right] &= n*\left(\frac{1}{(n-k)-2}\right) \\
+  &= \frac{n}{n-k-2}
+\end{aligned}
+$$
+In class it was shown that:
+$$
+  \frac{k}{n-k} \, \frac{(\widehat{\beta} - \beta)'Z'Z(\widehat{\beta} - \beta)}{n\widehat{\sigma}^{2}} \sim F_{k,n-k}
+$$
+Given that $E\left[F_{k,n-k}\right] = (n-k)/(n-k-2)$, we get:
+$$
+\begin{aligned}
+  E \left[\frac{(\widehat{\beta} - \beta)'Z'Z(\widehat{\beta} - \beta)}{n\widehat{\sigma}^{2}}\right] &= \frac{k}{n-k} \, \frac{n-k}{n-k-2} \\
+  &= \frac{k}{n-k-2}
 \end{aligned}
 $$
 
-Taking the expectation of a scalar returns the scalar. So we can simplify the above as:
+Taking the expectation of a scalar returns the scalar. So we can simplify the original equation as:
 $$
-  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \frac{1}{2}E\left[\frac{\sigma^{2}}{\widehat{\sigma}^{2}} - log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) - 1 + \frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{n\widehat{\sigma}^{2}}\right]
+\begin{aligned}
+  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) &= \frac{1}{2}\left[\frac{n}{n-k-2} - E_{\pmb{\theta}}\left[log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right)\right] - 1 + \frac{k}{n-k-2}\right] \\
+  &= \frac{1}{2}\left[-E_{\pmb{\theta}}\left[log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right)\right] + \frac{n + k}{n-k-2} - 1 \right]
+\end{aligned}
 $$
+We can rewrite the remaining log term using the fact that $log(a/b) = log(a) - log(b)$.
+$$
+\begin{aligned}
+  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) &= \frac{1}{2}\left[-\left(E_{\pmb{\theta}}\left[log\left(\sigma^{2}\right) - log\left(\widehat{\sigma}^{2}\right)\right]\right) + \frac{n + k}{n-k-2} - 1 \right] \\
+  &= \frac{1}{2}\left[-E_{\pmb{\theta}}\left[log\left(\sigma^{2}\right)\right] + E_{\pmb{\theta}}\left[log\left(\widehat{\sigma}^{2}\right)\right] + \frac{n + k}{n-k-2} - 1 \right]
+\end{aligned}
+$$
+We don't know how to evaluate $E_{\pmb{\theta}}\left[log\left(\widehat{\sigma}^{2}\right)\right]$, but $log\left(\sigma^{2}\right)$ is a constant - not a R.V - so we can rewrite the equation as:
+$$
+  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \frac{1}{2}\left[-log\left(\sigma^{2}\right) + E_{\pmb{\theta}}\left[log\left(\widehat{\sigma}^{2}\right)\right] + \frac{n + k}{n-k-2} - 1 \right]
+$$
+as required.
 
 
 

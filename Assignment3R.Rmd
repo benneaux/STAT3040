@@ -1,0 +1,15 @@
+---
+title: "Assignment3R"
+author: "Benjamin Moran"
+date: "1 September 2016"
+output: pdf_document
+---
+
+
+###	Assignment 3: R Coding
+
+
+Submission: You should email your R-code to `Ali.Eshragh@newcastle.edu.au' by Sunday, September 11, 11:55pm. Write your full name and student ID No. on the top of your code and your le name must be your complete surname.
+
+
+1.	Choose a dataset from `Google-Trends' and run statistical analysis similar to Sections 2 and 3 of this Computer Lab Notes.
