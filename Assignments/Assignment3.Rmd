@@ -2,9 +2,18 @@
 title: "Assignment3"
 author: "Benjamin Moran"
 date: "30 August 2016"
-output: pdf_document
 header-includes: \usepackage{amsmath} \usepackage{mathtools}
 ---
+Given the random vector $\pmb{Y}$, the **Kullback-Leibler Divergence** is the **distance**
+between two joint pdfs in the same family, indexed by a **parameter** $\pmb{\theta}$, say
+$f_{\pmb{Y}}(\pmb{y}; \pmb{\theta}_{1})$ and $f_{\pmb{Y}}(\pmb{y}; \pmb{\theta}_{2})$, defined as
+
+$$I(\pmb{\theta}_{1};\pmb{\theta}_{2}) = \frac{1}{n}E_{1}\left[log\left(\frac{f_{\pmb{Y}}(\pmb{Y}; \pmb{\theta}_{1})}{f_{\pmb{Y}}(\pmb{Y};\pmb{\theta}_{2})} \right) \right]$$
+
+where $E_{1}$ denotes **expectation** with respect to the **joint pdf** determined by $\pmb{\theta}_{1}$.
+That is,
+
+$$I(\pmb{\theta}_{1};\pmb{\theta}_{2}) = \frac{1}{n} \int\limits_{-\infty}^{\infty} \cdots \int\limits_{-\infty}^{\infty} log\left(\frac{f_{\pmb{Y}}(\pmb{Y}; \pmb{\theta}_{1})}{f_{\pmb{Y}}(\pmb{Y};\pmb{\theta}_{2})} \right)f_{\pmb{Y}}(\pmb{y};\pmb{\theta}_{1})d\pmb{y}$$
 
 ###Question 1
 Let us consider the $n \times 1$ **dependent vector** $\mathbf{X}$ and the $n \times k$ **observed matrix of independent variables** $Z$ as defined in Slide 10. We construct two **regression models** between $\mathbf{X}$ and $Z$ as follows:
