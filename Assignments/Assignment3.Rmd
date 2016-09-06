@@ -2,6 +2,10 @@
 title: "Assignment3"
 author: "Benjamin Moran"
 date: "30 August 2016"
+<<<<<<< HEAD
+=======
+output: html_document
+>>>>>>> 5d49dd1b1969b8bd20ed6d0bc691b2182dbbb9ae
 header-includes: \usepackage{amsmath} \usepackage{mathtools}
 ---
 Given the random vector $\pmb{Y}$, the **Kullback-Leibler Divergence** is the **distance**
@@ -34,6 +38,58 @@ $$
 $$
 
 **Answer:**
+**Answer:** We are given (in the lecture notes) that the random observation vector $\pmb{X}$ - corresponding to the Regression Model defined in the question - has a **Multivariate Normal** distribution with **mean** vector $Z\beta$ and the **Covariance** matrix $\sigma_{\mathcal{W}}^{2}I$, where $I$ is an $n \times n$ identity matrix (Chapter 2: slide 14).
+
+Therefore, the PDF of $\pmb{X}$ can be written as:
+
+  $$
+    f_{\pmb{X}}(\pmb{X};\pmb{\theta})=
+    (2\pi)^{-\frac{n}{2}}|\sigma_{\mathcal{W}}^{2}I|^{-\frac{1}{2}}
+    \exp\left\{
+      -\frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta})
+    \right\}
+  $$
+  
+Taking the log of this distribution gives is
+
+  $$
+    \mathcal{ln}(f_{\pmb{X}}(\pmb{X};\pmb{\theta})) = 
+      -\frac{n}{2}ln(2\pi) 
+      -ln(|\sigma_{\mathcal{W}}^{2}I|)-
+      \frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta})
+  $$
+  
+  Now, if we have two models *(i)* and *(ii)* for $\pmb{X}$ with the parameters stated above, the KL Divergence is given by
+  $$
+    \begin{aligned}
+      I(\pmb{\theta}_{1}; \pmb{\theta}_{2})
+      &=\frac{1}{2}E_{1}
+        \left[
+          log
+          \left(
+            \frac
+              {f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1})}
+              {f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{2})}
+          \right)
+        \right] \\
+      &=\frac{1}{2}E_{1}
+        \left[
+          log(f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}))
+          -
+          log(f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{2}))
+        \right] \\
+      &=\frac{1}{2}E_{1}
+        \left[
+        -\frac{2}{2}ln(2\pi)-ln(|\sigma_{\mathcal{W}}^{2}I|)-\frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta}) - \right.\\ 
+        &\quad
+        \left.\left(-\frac{2}{2}ln(2\pi)-ln(|\sigma_{\mathcal{W}}^{2}I|)-\frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta})\right)
+        \right] \\
+      &=\frac{1}{2}E_{1}
+        \left[
+          ln\left(\frac{|\sigma_{\mathcal{W}}^{2}I|}{|\sigma_{\mathcal{W}}^{2}I|}\right)
+        \right]
+    \end{aligned}
+  $$
 
 ***
 

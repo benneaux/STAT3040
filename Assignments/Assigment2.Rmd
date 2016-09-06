@@ -2,7 +2,7 @@
 title: "Assignment 2"
 author: "Benjamin Moran"
 date: "7 August 2016"
-output: pdf_document
+output: html_document
 ---
 
 ***
