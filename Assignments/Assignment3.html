@@ -134,24 +134,109 @@ $(document).ready(function () {
   \end{aligned}
   \end{cases}
 \]</span></p>
-<p>where <span class="math inline">\(\pmb{\mathcal{W}}_{1} \overset{iid}{\sim} N[0,\sigma_{1}^{2}]\)</span> and <span class="math inline">\(\pmb{\mathcal{W}}_{2} \overset{iid}{\sim} N[0,\sigma_{2}^{2}]\)</span> are two <strong>independent</strong> series. If we define <span class="math inline">\(\pmb{\theta}_{1}:=(\beta_{1}', \sigma_{1}^{2})'\)</span> and <span class="math inline">\(\pmb{\theta}_{2}:=(\beta_{2}', \sigma_{2}^{2})'\)</span>, show that the <strong>Kullback-Leibler Divergence</strong> between the joint pdf of <span class="math inline">\(\mathbf{X}\)</span> based on models <em>(i)</em> and <em>(ii)</em> is given as:</p>
+<p>where <span class="math inline">\(\pmb{\mathcal{W}}_{1} = (\mathcal{W}_{11}, \cdots, \mathcal{W}_{n1})'\)</span> and <span class="math inline">\(\pmb{\mathcal{W}}_{2} = (\mathcal{W}_{12}, \cdots, \mathcal{W}_{n2})'\)</span>, <span class="math inline">\(\mathcal{W}_{11}, \cdots, \mathcal{W}_{n1} \overset{iid}{\sim} N[0,\sigma_{1}^{2}]\)</span> and <span class="math inline">\(\mathcal{W}_{12}, \cdots, \mathcal{W}_{n2} \overset{iid}{\sim} N[0,\sigma_{2}^{2}]\)</span> are two <strong>independent</strong> series. If we define <span class="math inline">\(\pmb{\theta}_{1}:=(\beta_{1}', \sigma_{1}^{2})'\)</span> and <span class="math inline">\(\pmb{\theta}_{2}:=(\beta_{2}', \sigma_{2}^{2})'\)</span>, show that the <strong>Kullback-Leibler Divergence</strong> between the joint pdf of <span class="math inline">\(\mathbf{X}\)</span> based on models <em>(i)</em> and <em>(ii)</em> is given as:</p>
 <p><span class="math display">\[
   I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) = \frac{1}{2}\left(\frac{\sigma_{1}^{2}}{\sigma_{2}^{2}} - log\left(\frac{\sigma_{1}^{2}}{\sigma_{2}^{2}}\right) - 1\right) + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{2n\sigma_{2}^{2}}
 \]</span></p>
-<p><strong>Answer:</strong></p>
+<p><strong>Answer:</strong> We are given (in the lecture notes) that the random observation vector <span class="math inline">\(\pmb{X}\)</span> - corresponding to the Regression Model defined in the question - has a <strong>Multivariate Normal</strong> distribution with <strong>mean</strong> vector <span class="math inline">\(Z\beta\)</span> and the <strong>Covariance</strong> matrix <span class="math inline">\(\sigma_{\mathcal{W}}^{2}I\)</span>, where <span class="math inline">\(I\)</span> is an <span class="math inline">\(n \times n\)</span> identity matrix (Chapter 2: slide 14).</p>
+<p>Therefore, the PDF of <span class="math inline">\(\pmb{X}\)</span> can be written as:</p>
+<p><span class="math display">\[
+    f_{\pmb{X}}(\pmb{X};\pmb{\theta})=
+    (2\pi)^{-\frac{n}{2}}|\sigma_{\mathcal{W}}^{2}I|^{-\frac{1}{2}}
+    \exp\left\{
+      -\frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta})
+    \right\}
+  \]</span></p>
+<p>Taking the log of this distribution gives is</p>
+<p><span class="math display">\[
+    \mathcal{ln}(f_{\pmb{X}}(\pmb{X};\pmb{\theta})) = 
+      -\frac{n}{2}ln(2\pi) 
+      -ln(|\sigma_{\mathcal{W}}^{2}I|)-
+      \frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta})
+  \]</span></p>
+<p>Now, if we have two models <em>(i)</em> and <em>(ii)</em> for <span class="math inline">\(\pmb{X}\)</span> with the parameters stated above, the KL Divergence is given by <span class="math display">\[
+    \begin{aligned}
+      I(\pmb{\theta}_{1}; \pmb{\theta}_{2})
+      &amp;=\frac{1}{2}E_{1}
+        \left[
+          log
+          \left(
+            \frac
+              {f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1})}
+              {f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{2})}
+          \right)
+        \right] \\
+      &amp;=\frac{1}{2}E_{1}
+        \left[
+          log(f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}))
+          -
+          log(f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{2}))
+        \right] \\
+      &amp;=\frac{1}{2}E_{1}
+        \left[
+        -\frac{2}{2}ln(2\pi)-ln(|\sigma_{\mathcal{W}}^{2}I|)-\frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta}) - \right.\\ 
+        &amp;\quad
+        \left.\left(-\frac{2}{2}ln(2\pi)-ln(|\sigma_{\mathcal{W}}^{2}I|)-\frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta})\right)
+        \right] \\
+      &amp;=\frac{1}{2}E_{1}
+        \left[
+          ln\left(\frac{|\sigma_{\mathcal{W}}^{2}I|}{|\sigma_{\mathcal{W}}^{2}I|}\right)
+        \right]
+    \end{aligned}
+  \]</span></p>
 <hr />
 </div>
 <div id="bonus-question" class="section level3">
 <h3>Bonus Question</h3>
-<p>If the <strong>true</strong> value of the parameter vector is <span class="math inline">\(\pmb{\theta} = (\beta', \sigma^{2})\)</span> and the <strong>estimated</strong> value based on the <strong>sample</strong> is <span class="math inline">\(\pmb{\widehat{\theta}} = (\widehat{\beta}', \widehat{ \sigma}^{2})'\)</span>, one may argue that the <strong>best</strong> model would be one that <strong>minimizes</strong> the <strong>Kullback-Leibler distance</strong> between the joint pdfs of <strong>theoretical</strong> value and the <strong>sample</strong> estimation, say <span class="math inline">\(I(\pmb\theta; \pmb{\widehat{\theta}})\)</span>. Because <span class="math inline">\(\pmb{\theta}\)</span> will not be known, Hurvich and Tsai (1989) considered finding an <strong>unbiased estimator</strong> for <span class="math inline">\(E_{ \pmb{\theta}}[I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2})]\)</span>, where</p>
+<p>If the <strong>true</strong> value of the parameter vector is <span class="math inline">\(\pmb{\theta} = (\beta', \sigma^{2})'\)</span> and the <strong>estimated</strong> value based on the <strong>sample</strong> <span class="math inline">\(\widehat{\pmb{\theta}} = (\widehat{\beta'}, \widehat{\sigma^{2}})'\)</span>, one may argue that the <strong>best</strong> model would be one that <strong>minimizes</strong> the <strong>Kullback-Leibler distance</strong> between the joint-pdfs of <strong>theoretical</strong> value and the <strong>sample</strong> estimation, say <span class="math inline">\(I(\pmb{\theta}; \widehat{\pmb{\theta}})\)</span>. Because <span class="math inline">\(\pmb{\theta}\)</span> will not be known, Hurvich and Tsai (1989) considered finding an <strong>unbiased estimator</strong> for <span class="math inline">\(E_{\pmb{\theta}}[I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2})]\)</span>, where</p>
 <p><span class="math display">\[
   I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \frac{1}{2}\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}} - log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) - 1\right) + \frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{2n\widehat{\sigma}^{2}}
 \]</span></p>
-<p>and <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\widehat{\beta}\)</span> are <span class="math inline">\(k \times 1\)</span> regression parameter vector and its <strong>estimation</strong>, respectively. <strong>Show</strong> that</p>
+<p>and <span class="math inline">\(\beta\)</span> is a <span class="math inline">\(k \times 1\)</span> regression parameter vector. Show that</p>
 <p><span class="math display">\[
-  E_{\pmb{\theta}}[I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2})] = \frac{1}{2}\left(-log(\sigma^{2}) + E_{\pmb{\theta}}[log(\widehat{\sigma}^{2})] + \frac{n+k}{n-k-2} - 1\right).
+  E_{\pmb{\theta}}[I(\beta_{1}, \sigma_{1}^{2}; \widehat{\beta}, \widehat{\sigma}^{2})] = \frac{1}{2}\left(-log(\sigma^{2}) + E_{\pmb{\theta}}[log(\widehat{\sigma}^{2})] + \frac{n+k}{n-k-2} - 1\right).
 \]</span></p>
-<p><strong>Answer:</strong></p>
+<p><strong>Answer:</strong> Expectation is a linear function, so we can rewrite the above as <span class="math display">\[
+\begin{aligned}
+  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) &amp;= 
+    \frac{1}{2}E\left[\frac{\sigma^{2}}{\widehat{\sigma}^{2}} 
+    - log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right) 
+    - 1 + 
+    \frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{n\widehat{\sigma}^{2}}\right] \\
+  &amp;=\frac{1}{2}\left(E\left[\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right] - E\left[log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right)\right] - E\left[1\right] + E\left[\frac{(\beta - \widehat{\beta})'Z'Z(\beta - \widehat{\beta})}{n\widehat{\sigma}^{2}}\right]\right)
+\end{aligned}
+\]</span></p>
+<p>From the reference text, we are given that: <span class="math display">\[
+\begin{aligned}
+  \frac{n\widehat{\sigma}^{2}}{\sigma^{2}} &amp;\sim \chi_{n-k}^{2} \\
+  \frac{(\widehat{\beta} - \beta)'Z'Z(\widehat{\beta} - \beta)}{n\widehat{\sigma}^{2}} &amp;\sim \chi_{k}^{2}
+\end{aligned}
+\]</span> We are also given that if <span class="math inline">\(x \sim \chi_{n}^{2} \implies E[(\frac{1}{x})] = \frac{1}{n-2}\)</span>. So: <span class="math display">\[
+\begin{aligned}
+  E \left[\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right)\right] &amp;= n*\left(\frac{1}{(n-k)-2}\right) \\
+  &amp;= \frac{n}{n-k-2}
+\end{aligned}
+\]</span> In class it was shown that: <span class="math display">\[
+  \frac{k}{n-k} \, \frac{(\widehat{\beta} - \beta)'Z'Z(\widehat{\beta} - \beta)}{n\widehat{\sigma}^{2}} \sim F_{k,n-k}
+\]</span> Given that <span class="math inline">\(E\left[F_{k,n-k}\right] = (n-k)/(n-k-2)\)</span>, we get: <span class="math display">\[
+\begin{aligned}
+  E \left[\frac{(\widehat{\beta} - \beta)'Z'Z(\widehat{\beta} - \beta)}{n\widehat{\sigma}^{2}}\right] &amp;= \frac{k}{n-k} \, \frac{n-k}{n-k-2} \\
+  &amp;= \frac{k}{n-k-2}
+\end{aligned}
+\]</span></p>
+<p>Taking the expectation of a scalar returns the scalar. So we can simplify the original equation as: <span class="math display">\[
+\begin{aligned}
+  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) &amp;= \frac{1}{2}\left[\frac{n}{n-k-2} - E_{\pmb{\theta}}\left[log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right)\right] - 1 + \frac{k}{n-k-2}\right] \\
+  &amp;= \frac{1}{2}\left[-E_{\pmb{\theta}}\left[log\left(\frac{\sigma^{2}}{\widehat{\sigma}^{2}}\right)\right] + \frac{n + k}{n-k-2} - 1 \right]
+\end{aligned}
+\]</span> We can rewrite the remaining log term using the fact that <span class="math inline">\(log(a/b) = log(a) - log(b)\)</span>. <span class="math display">\[
+\begin{aligned}
+  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) &amp;= \frac{1}{2}\left[-\left(E_{\pmb{\theta}}\left[log\left(\sigma^{2}\right) - log\left(\widehat{\sigma}^{2}\right)\right]\right) + \frac{n + k}{n-k-2} - 1 \right] \\
+  &amp;= \frac{1}{2}\left[-E_{\pmb{\theta}}\left[log\left(\sigma^{2}\right)\right] + E_{\pmb{\theta}}\left[log\left(\widehat{\sigma}^{2}\right)\right] + \frac{n + k}{n-k-2} - 1 \right]
+\end{aligned}
+\]</span> We don’t know how to evaluate <span class="math inline">\(E_{\pmb{\theta}}\left[log\left(\widehat{\sigma}^{2}\right)\right]\)</span>, but <span class="math inline">\(log\left(\sigma^{2}\right)\)</span> is a constant - not a R.V - so we can rewrite the equation as: <span class="math display">\[
+  E_{\pmb{\theta}}I(\beta, \sigma^{2}; \widehat{\beta}, \widehat{\sigma}^{2}) = \frac{1}{2}\left[-log\left(\sigma^{2}\right) + E_{\pmb{\theta}}\left[log\left(\widehat{\sigma}^{2}\right)\right] + \frac{n + k}{n-k-2} - 1 \right]
+\]</span> as required.</p>
 <hr />
 </div>
 
