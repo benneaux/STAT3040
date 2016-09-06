@@ -1,0 +1,161 @@
+---
+title: "Assignment3R"
+author: "Benjamin Moran"
+date: "1 September 2016"
+output: html_document
+---
+
+```{r Setup, include=FALSE}
+require(broom)
+require(knitr)
+require(tidyr)
+require(magrittr)
+require(ggfortify)
+require(ggplot2)
+```
+
+###Getting Started the Project
+
+
+1.	Open the page https://www.google.com.au/trends/.
+
+2.	Type a search keyword, say `wine'.
+
+3.	Choose a country, say `Australia'.
+
+4.	Choose a compare search keyword, say `beer'.
+
+5.	Save the data  file with extension .csv' on your computer, say test.csv'.
+
+6.	Rearrange your data  file such that each column contains the heading and data only.
+
+7.	Set your current working directory in R where the le has been saved.
+
+```{r Q7a}
+
+setwd("/Users/benjamin/R/STAT3040/Assignments")
+
+```
+
+8.	Store the data from the  le to a variable in R:
+
+```{r Q8a}
+WBAust <- read.csv("GTWineBeerTs.csv", header=TRUE, skip = 1)
+```
+
+9.	Look at the structure of the variable: 
+
+```{r Q9a, echo=FALSE}
+
+head(WBAust)
+
+```
+
+10.	All students should form groups of size 1-3 to carry out the project. The list of each group mem-bers should be sent to `Ali.Eshragh@newcastle.edu.au' by Wednesday, September 7, 11:55pm.
+
+11.	Those students that do not join a group, should attend the consultation session in V239 on Thursday, September 8, 11:30am-12:30pm to discuss the possibility of forming new groups to-gether.
+
+12.	Each group should send their suggested data le with a short description to `Ali.Eshragh@newcastle.edu.au' by Wednesday, October 5, 11:55pm. You are free to nd your dataset from any permitted re-
+
+source. `Google-Trend' is only one suggestion.
+
+###Linear Regression in R
+
+
+1.	Find the time range of dataset:
+
+```{r Q1b}
+
+WBAust[1,1]
+
+dim(WBAust)
+
+WBAust[152,1]
+
+```
+2.	Construct two time series for wine and beer consumption in Australia within the range of ob-servation times:
+
+```{r Q2b}
+
+WineTS <- ts(WBAust[,2], start = c(2004,1), end = c(2016,8), frequency = 12) 
+WineTS
+
+BeerTS <- ts(WBAust[,3], start = c(2004,1), end = c(2016,8), frequency = 12) 
+BeerTS
+BeerTS2 <- fortify(BeerTS) %>% 
+  separate(Index, c("Year", "Month", "Day")) %>%
+  subset(select = -Day)
+```
+
+
+3.	Plot the time series of WineTS and BeerTS:
+
+```{r Q3b}
+
+plot.ts(WineTS, type="l") 
+plot.ts(BeerTS, type="l") 
+plot.ts(cbind(WineTS, BeerTS), type="l") 
+ts.plot(cbind(WineTS, BeerTS), type="l")
+
+```
+
+```{r Q3b alt}
+ggplot(BeerTS2, aes(Month, Data, group = Year, colour = Year)) + 
+  geom_line()
+
+```
+
+4.	Construct a time variable for observation times:
+```{r Q4b}
+TimeTS <- time(WineTS) 
+TimeTS
+```
+
+5.	Plot the scatterplot matrix:
+
+```{r Q5b}
+data <- data.frame(Wine = WineTS, Time = TimeTS, Beer = BeerTS)
+pairs(cbind(Wine = WineTS, Time = TimeTS, Beer = BeerTS))
+```
+
+6. Fit two regression models
+$$
+  \begin{cases}
+    \begin{aligned}
+      \text{Model 1: Wine}_{t} &=	\beta_{1} +  \beta_{2}t +  \beta_{3}\text{beer}_{t} + \mathcal{W}_{t} \\
+       \text{Model 2: Wine}_{t} &=	\beta_{1} +  \beta_{2}t +  \beta_{3}t^{2} +  \beta_{4}\text{beer}_{t} + \mathcal{W}_{t}
+    \end{aligned}
+  \end{cases}
+$$
+```{r Q6b}
+fit1 <- lm(WineTS ~ TimeTS + BeerTS) 
+TimeTS2 <- TimeTS^2
+fit2 <- lm(WineTS ~ TimeTS + TimeTS2 + BeerTS)
+
+```
+
+7.	Summary of the regression parameters estimations: 
+
+```{r Q7b}
+glance(fit1)
+tidy(fit1)
+glance(fit2)
+tidy(fit2)
+```
+
+
+8.	Compare the values of AIC for two models:
+
+```{r Q8b}
+AIC(fit1)/152 - log(2*pi)
+AIC(fit2)/152 - log(2*pi)
+```
+
+
+ch ch
+
+
+####References
+
+[1]	R.H. Shumway and D.S. Sto er, Time Series Analysis and Its Applications With R Examples, Springer, New York, 2010.
+
