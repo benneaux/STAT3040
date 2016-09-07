@@ -2,11 +2,8 @@
 title: "Assignment3"
 author: "Benjamin Moran"
 date: "30 August 2016"
-<<<<<<< HEAD
-=======
 output: html_document
->>>>>>> 5d49dd1b1969b8bd20ed6d0bc691b2182dbbb9ae
-header-includes: \usepackage{amsmath} \usepackage{mathtools}
+
 ---
 Given the random vector $\pmb{Y}$, the **Kullback-Leibler Divergence** is the **distance**
 between two joint pdfs in the same family, indexed by a **parameter** $\pmb{\theta}$, say
@@ -37,27 +34,87 @@ $$
   I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) = \frac{1}{2}\left(\frac{\sigma_{1}^{2}}{\sigma_{2}^{2}} - log\left(\frac{\sigma_{1}^{2}}{\sigma_{2}^{2}}\right) - 1\right) + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{2n\sigma_{2}^{2}}
 $$
 
-**Answer:**
-**Answer:** We are given (in the lecture notes) that the random observation vector $\pmb{X}$ - corresponding to the Regression Model defined in the question - has a **Multivariate Normal** distribution with **mean** vector $Z\beta$ and the **Covariance** matrix $\sigma_{\mathcal{W}}^{2}I$, where $I$ is an $n \times n$ identity matrix (Chapter 2: slide 14).
-
-Therefore, the PDF of $\pmb{X}$ can be written as:
+**Answer:** We are given (in the lecture notes) that the random observation vector $\pmb{X}$ - corresponding to the Regression Model defined in the question - has a **Multivariate Normal** distribution with **mean** vector $Z\beta$ and the **Covariance** matrix $\sigma_{\mathcal{W}}^{2}I = \Gamma$, where $I$ is an $n \times n$ identity matrix (Chapter 2: slide 14). The pdf for a Mutivariate Normal Distribution is given by:
 
   $$
     f_{\pmb{X}}(\pmb{X};\pmb{\theta})=
-    (2\pi)^{-\frac{n}{2}}|\sigma_{\mathcal{W}}^{2}I|^{-\frac{1}{2}}
+    (2\pi)^{-\frac{n}{2}}|\Gamma|^{-\frac{1}{2}}
     \exp\left\{
-      -\frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta})
+      -\frac{1}{2}({x}-{Z\beta})^T\left[{\Gamma}\right]^{-1}({x}-{Z\beta})
     \right\}
   $$
-  
-Taking the log of this distribution gives is
 
+We can rewrite the expression for the **Kullback-Leibler Divergence** above as:
+  
   $$
-    \mathcal{ln}(f_{\pmb{X}}(\pmb{X};\pmb{\theta})) = 
-      -\frac{n}{2}ln(2\pi) 
-      -ln(|\sigma_{\mathcal{W}}^{2}I|)-
-      \frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta})
-  $$
+    \begin{aligned}
+      I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
+      &= \int\limits_{\mathbb{R}^{2}} 
+        p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) 
+        log
+          \left(
+            \frac
+              {p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1})}
+              {q_{\pmb{X}}(\pmb{X};\pmb{\theta}_{2})}
+          \right) \\
+      &= \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \, 
+          log
+            \left(
+              \frac
+                {(2\pi)^{-\frac{n}{2}}|\Gamma_{1}|^{-\frac{1}{2}}
+                  \exp
+                    \left\{
+                      -\frac
+                        {1}{2}
+                      ({x}-{Z\beta_{1}})^T\Gamma_{1}^{-1}({x}-{Z\beta_{1}})
+                    \right\}}
+                {(2\pi)^{-\frac{n}{2}}|\Gamma_{2}|^{-\frac{1}{2}}
+                  \exp
+                    \left\{
+                      -\frac
+                        {1}{2}
+                      ({x}-{Z\beta_{2}})^T \Gamma_{2}^{-1} ({x}-{Z\beta_{2}})
+                    \right\}}
+            \right) \\
+      &= -\frac
+            {1}{2}
+          \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \, 
+          log
+            \left(
+              \frac
+                {|\Gamma_{1}|}{|\Gamma_{2}|}
+            \right)  
+          + \frac
+              {1}{2}
+            \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{2}})^T \Gamma_{2}^{-1} ({x}-{Z\beta_{2}})
+          - \frac
+              {1}{2}
+            \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{1}})^T \Gamma_{1}^{-1} ({x}-{Z\beta_{1}}) \\
+      &= -\frac
+            {1}{2}
+          log
+            \left(
+              \frac
+                {\sigma_{1}^{2}}{\sigma_{2}^{2}}
+            \right)  
+          + \frac
+              {1}{2}
+            \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{2}})^T \Gamma_{2}^{-1} ({x}-{Z\beta_{2}})
+          - \frac
+              {1}{2}
+            \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{1}})^T \Gamma_{1}^{-1} ({x}-{Z\beta_{1}})            
+    \end{aligned}$$
+
+
+
+
+
+  
+
   
   Now, if we have two models *(i)* and *(ii)* for $\pmb{X}$ with the parameters stated above, the KL Divergence is given by
   $$
@@ -80,14 +137,48 @@ Taking the log of this distribution gives is
         \right] \\
       &=\frac{1}{2}E_{1}
         \left[
-        -\frac{2}{2}ln(2\pi)-ln(|\sigma_{\mathcal{W}}^{2}I|)-\frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta}) - \right.\\ 
-        &\quad
-        \left.\left(-\frac{2}{2}ln(2\pi)-ln(|\sigma_{\mathcal{W}}^{2}I|)-\frac{1}{2}({x}-{Z\beta})^T\left[{\sigma_{\mathcal{W}}^{2}I}\right]^{-1}({x}-{Z\beta})\right)
+          -\frac{1}{2}
+            \left(
+              2ln(2\pi)
+              + ln(|\Gamma_{1}|)
+              + ({x}-{Z\beta_{1}})^T\left[{\Gamma_{1}}\right]^{-1}({x}-{Z\beta_{1}}) 
+            \right.
+        \right.\\ 
+      &\qquad\qquad\quad
+        \left.
+          \left. 
+            -2ln(2\pi)
+            -ln(|\Gamma_{2}|)
+            -({x}-{Z\beta_{2}})^T\left[{\Gamma_{2}}\right]^{-1}({x}-{Z\beta_{2}})
+          \right)
         \right] \\
-      &=\frac{1}{2}E_{1}
+      &=
+        \frac
+          {1}{2}
+        E_{1}
         \left[
-          ln\left(\frac{|\sigma_{\mathcal{W}}^{2}I|}{|\sigma_{\mathcal{W}}^{2}I|}\right)
-        \right]
+          -\frac
+            {1}{2}
+          \left(
+            ln
+            \left(
+              \frac
+                {|\Gamma_{1}|}
+                {|\Gamma_{2}|}
+              \right)
+            + ({x}-{Z\beta_{1}})^T\left[{\Gamma_{1}}\right]^{-1}({x}-{Z\beta_{1}})
+            - ({x}-{Z\beta_{2}})^T\left[{\Gamma_{2}}\right]^{-1}({x}-{Z\beta_{2}})
+            \right)
+          \right] \\
+      &=
+        \frac
+          {1}{2}
+        ln
+          \left(
+            \frac
+              {|\Gamma_{1}|}
+              {|\Gamma_{2}|}
+            \right)
     \end{aligned}
   $$
 
