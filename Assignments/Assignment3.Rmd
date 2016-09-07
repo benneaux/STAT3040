@@ -2,8 +2,7 @@
 title: "Assignment3"
 author: "Benjamin Moran"
 date: "30 August 2016"
-output: html_document
-
+output: pdf_document
 ---
 Given the random vector $\pmb{Y}$, the **Kullback-Leibler Divergence** is the **distance**
 between two joint pdfs in the same family, indexed by a **parameter** $\pmb{\theta}$, say
@@ -37,10 +36,10 @@ $$
 **Answer:** We are given (in the lecture notes) that the random observation vector $\pmb{X}$ - corresponding to the Regression Model defined in the question - has a **Multivariate Normal** distribution with **mean** vector $Z\beta$ and the **Covariance** matrix $\sigma_{\mathcal{W}}^{2}I = \Gamma$, where $I$ is an $n \times n$ identity matrix (Chapter 2: slide 14). The pdf for a Mutivariate Normal Distribution is given by:
 
   $$
-    f_{\pmb{X}}(\pmb{X};\pmb{\theta})=
+    f_{\pmb{X}}(x;\pmb{\theta})=
     (2\pi)^{-\frac{n}{2}}|\Gamma|^{-\frac{1}{2}}
     \exp\left\{
-      -\frac{1}{2}({x}-{Z\beta})^T\left[{\Gamma}\right]^{-1}({x}-{Z\beta})
+      -\frac{1}{2}({x}-{Z\beta})'\Gamma^{-1}({x}-{Z\beta})
     \right\}
   $$
 
@@ -50,14 +49,14 @@ We can rewrite the expression for the **Kullback-Leibler Divergence** above as:
     \begin{aligned}
       I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
       &= \int\limits_{\mathbb{R}^{2}} 
-        p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) 
+        f_{\pmb{X}}(x;\pmb{\theta}_{1}) 
         log
           \left(
             \frac
-              {p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1})}
-              {q_{\pmb{X}}(\pmb{X};\pmb{\theta}_{2})}
-          \right) \\
-      &= \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \, 
+              {f_{\pmb{X}}(x;\pmb{\theta}_{1})}
+              {f_{\pmb{X}}(x;\pmb{\theta}_{2})}
+          \right)d\pmb{X} \\
+      &= \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
           log
             \left(
               \frac
@@ -66,121 +65,119 @@ We can rewrite the expression for the **Kullback-Leibler Divergence** above as:
                     \left\{
                       -\frac
                         {1}{2}
-                      ({x}-{Z\beta_{1}})^T\Gamma_{1}^{-1}({x}-{Z\beta_{1}})
+                      ({x}-{Z\beta_{1}})'\Gamma_{1}^{-1}({x}-{Z\beta_{1}})
                     \right\}}
                 {(2\pi)^{-\frac{n}{2}}|\Gamma_{2}|^{-\frac{1}{2}}
                   \exp
                     \left\{
                       -\frac
                         {1}{2}
-                      ({x}-{Z\beta_{2}})^T \Gamma_{2}^{-1} ({x}-{Z\beta_{2}})
+                      ({x}-{Z\beta_{2}})' \Gamma_{2}^{-1} ({x}-{Z\beta_{2}})
                     \right\}}
-            \right) \\
+            \right)d\pmb{X} \\
       &= -\frac
             {1}{2}
-          \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \, 
+          \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
           log
             \left(
               \frac
                 {|\Gamma_{1}|}{|\Gamma_{2}|}
-            \right)  
-          + \frac
-              {1}{2}
-            \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \,
-            ({x}-{Z\beta_{2}})^T \Gamma_{2}^{-1} ({x}-{Z\beta_{2}})
+            \right)d\pmb{X}  
           - \frac
               {1}{2}
-            \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \,
-            ({x}-{Z\beta_{1}})^T \Gamma_{1}^{-1} ({x}-{Z\beta_{1}}) \\
+            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{1}})' \Gamma_{1}^{-1} ({x}-{Z\beta_{1}})\,d\pmb{X} \\
+          &\qquad\qquad + \frac
+              {1}{2}
+            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{2}})' \Gamma_{2}^{-1} ({x}-{Z\beta_{2}})\,d\pmb{X} \\
       &= -\frac
             {1}{2}
           log
             \left(
               \frac
                 {\sigma_{1}^{2}}{\sigma_{2}^{2}}
-            \right)  
-          + \frac
-              {1}{2}
-            \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \,
-            ({x}-{Z\beta_{2}})^T \Gamma_{2}^{-1} ({x}-{Z\beta_{2}})
+            \right) 
+            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X}
           - \frac
-              {1}{2}
-            \int\limits_{\mathbb{R}^{2}}p_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}) \,
-            ({x}-{Z\beta_{1}})^T \Gamma_{1}^{-1} ({x}-{Z\beta_{1}})            
+              {({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}})}{2\,\Gamma_{1}}
+            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X} \\
+          &\qquad\qquad + \frac
+              {1}{2\,\Gamma_{2}}
+            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}            
     \end{aligned}$$
+    
 
 
+Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a pdf and therefore integrates to $1$. Secondly, we have that $({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}}) = \Gamma_{1}$.
 
-
-
-  
-
-  
-  Now, if we have two models *(i)* and *(ii)* for $\pmb{X}$ with the parameters stated above, the KL Divergence is given by
   $$
-    \begin{aligned}
-      I(\pmb{\theta}_{1}; \pmb{\theta}_{2})
-      &=\frac{1}{2}E_{1}
-        \left[
+    I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
+    = -\frac
+        {1}{2}
           log
-          \left(
-            \frac
-              {f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1})}
-              {f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{2})}
-          \right)
-        \right] \\
-      &=\frac{1}{2}E_{1}
-        \left[
-          log(f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{1}))
-          -
-          log(f_{\pmb{X}}(\pmb{X};\pmb{\theta}_{2}))
-        \right] \\
-      &=\frac{1}{2}E_{1}
-        \left[
-          -\frac{1}{2}
-            \left(
-              2ln(2\pi)
-              + ln(|\Gamma_{1}|)
-              + ({x}-{Z\beta_{1}})^T\left[{\Gamma_{1}}\right]^{-1}({x}-{Z\beta_{1}}) 
-            \right.
-        \right.\\ 
-      &\qquad\qquad\quad
-        \left.
-          \left. 
-            -2ln(2\pi)
-            -ln(|\Gamma_{2}|)
-            -({x}-{Z\beta_{2}})^T\left[{\Gamma_{2}}\right]^{-1}({x}-{Z\beta_{2}})
-          \right)
-        \right] \\
-      &=
-        \frac
-          {1}{2}
-        E_{1}
-        \left[
-          -\frac
-            {1}{2}
-          \left(
-            ln
             \left(
               \frac
-                {|\Gamma_{1}|}
-                {|\Gamma_{2}|}
-              \right)
-            + ({x}-{Z\beta_{1}})^T\left[{\Gamma_{1}}\right]^{-1}({x}-{Z\beta_{1}})
-            - ({x}-{Z\beta_{2}})^T\left[{\Gamma_{2}}\right]^{-1}({x}-{Z\beta_{2}})
+                {\sigma_{1}^{2}}{\sigma_{2}^{2}}
             \right)
-          \right] \\
-      &=
-        \frac
+      - \frac
           {1}{2}
-        ln
-          \left(
-            \frac
-              {|\Gamma_{1}|}
-              {|\Gamma_{2}|}
-            \right)
+      + \frac
+          {1}{2\,\Gamma_{2}}
+        \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}
+  $$
+  
+  Now let's simplify the remaining integral:
+  
+  $$
+    \begin{aligned}
+       \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}
+        &= \Gamma_{1} + \frac{(Z\beta_{1} - Z\beta_{2})'(Z\beta_{1} - Z\beta_{2})}{n} \\
+        &= \Gamma_{1} + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{n} 
     \end{aligned}
   $$
+ 
+ Substituting this back into the original, we get:
+ 
+  $$
+    \begin{aligned}
+    I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
+    &= -\frac
+        {1}{2}
+          log
+            \left(
+              \frac
+                {\sigma_{1}^{2}}{\sigma_{2}^{2}}
+            \right)
+      - \frac
+          {1}{2}
+      + \frac
+          {1}{2\,\Gamma_{2}}
+        \left(
+          \Gamma_{1} + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{n}
+        \right) \\
+      &= \frac
+            {1}{2}
+          \left(
+          \frac
+          {\sigma_{1}^{2}}{\sigma_{2}^{2}}
+          - log
+            \left(
+              \frac
+                {\sigma_{1}^{2}}{\sigma_{2}^{2}}
+            \right)
+            - 1
+          \right)
+      + \frac
+          {(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}
+          {2n\sigma_{2}^{2}}
+    \end{aligned}
+  $$
+  
+as required.
 
 ***
 
