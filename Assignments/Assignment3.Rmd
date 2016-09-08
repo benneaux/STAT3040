@@ -2,7 +2,7 @@
 title: "Assignment3"
 author: "Benjamin Moran"
 date: "30 August 2016"
-output: pdf_document
+output: html_document
 ---
 Given the random vector $\pmb{Y}$, the **Kullback-Leibler Divergence** is the **distance**
 between two joint pdfs in the same family, indexed by a **parameter** $\pmb{\theta}$, say
@@ -48,15 +48,19 @@ We can rewrite the expression for the **Kullback-Leibler Divergence** above as:
   $$
     \begin{aligned}
       I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
-      &= \int\limits_{\mathbb{R}^{2}} 
-        f_{\pmb{X}}(x;\pmb{\theta}_{1}) 
-        log
-          \left(
-            \frac
-              {f_{\pmb{X}}(x;\pmb{\theta}_{1})}
-              {f_{\pmb{X}}(x;\pmb{\theta}_{2})}
-          \right)d\pmb{X} \\
-      &= \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
+      &= \frac
+          {1}{n}
+         \int\limits_{\mathbb{R}^{n}} 
+         f_{\pmb{X}}(x;\pmb{\theta}_{1}) 
+         log
+           \left(
+             \frac
+               {f_{\pmb{X}}(x;\pmb{\theta}_{1})}
+               {f_{\pmb{X}}(x;\pmb{\theta}_{2})}
+           \right)d\pmb{X} \\
+      &= \frac
+            {1}{n}
+          \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
           log
             \left(
               \frac
@@ -76,42 +80,61 @@ We can rewrite the expression for the **Kullback-Leibler Divergence** above as:
                     \right\}}
             \right)d\pmb{X} \\
       &= -\frac
-            {1}{2}
-          \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
+            {1}{2n}
+          \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
           log
             \left(
               \frac
                 {|\Gamma_{1}|}{|\Gamma_{2}|}
             \right)d\pmb{X}  
           - \frac
-              {1}{2}
-            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+              {1}{2n}
+            \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
             ({x}-{Z\beta_{1}})' \Gamma_{1}^{-1} ({x}-{Z\beta_{1}})\,d\pmb{X} \\
           &\qquad\qquad + \frac
-              {1}{2}
-            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+              {1}{2n}
+            \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
             ({x}-{Z\beta_{2}})' \Gamma_{2}^{-1} ({x}-{Z\beta_{2}})\,d\pmb{X} \\
       &= -\frac
-            {1}{2}
+            {n}{2n}
           log
             \left(
               \frac
                 {\sigma_{1}^{2}}{\sigma_{2}^{2}}
             \right) 
-            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X}
+            \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X}
           - \frac
-              {({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}})}{2\,\Gamma_{1}}
-            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X} \\
+              {({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}})}{2n\,\Gamma_{1}}
+            \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X} \\
           &\qquad\qquad + \frac
-              {1}{2\,\Gamma_{2}}
-            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+              {1}{2n\,\Gamma_{2}}
+            \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
             ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}            
     \end{aligned}$$
     
 
 
-Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a pdf and therefore integrates to $1$. Secondly, we have that $({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}}) = \Gamma_{1}$.
+Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a pdf and therefore integrates to $1$. Secondly, we have that:
 
+  $$
+  \begin{aligned}
+    ({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}}) &= \Gamma_{1} \\
+    \implies  
+    \frac
+      {({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}})}
+      {2n\Gamma_{1}}
+    &= \frac
+      {trace(\Gamma_{1}\Gamma_{1}^{-1})}
+      {2n} \\
+    &= \frac
+        {trace(I_{n})}
+        {n} \\
+    &= \frac
+        {n}{n} \\
+    &= 1    
+  \end{aligned}
+  $$
+  Substituting these results into the equation leaves:
   $$
     I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
     = -\frac
@@ -124,8 +147,8 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
       - \frac
           {1}{2}
       + \frac
-          {1}{2\,\Gamma_{2}}
-        \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+          {1}{2n\,\Gamma_{2}}
+        \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
             ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}
   $$
   
@@ -133,10 +156,10 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
   
   $$
     \begin{aligned}
-       \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+       \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
             ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}
-        &= \Gamma_{1} + \frac{(Z\beta_{1} - Z\beta_{2})'(Z\beta_{1} - Z\beta_{2})}{n} \\
-        &= \Gamma_{1} + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{n} 
+        &= E_{1}\left[({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\right] \\
+        &= \Gamma_{1} + (\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})
     \end{aligned}
   $$
  
@@ -155,10 +178,38 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
       - \frac
           {1}{2}
       + \frac
-          {1}{2\,\Gamma_{2}}
+          {1}{2n\,\Gamma_{2}}
         \left(
-          \Gamma_{1} + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{n}
+          \Gamma_{1} + (\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})
         \right) \\
+    &= -\frac
+        {1}{2}
+          log
+            \left(
+              \frac
+                {\sigma_{1}^{2}}{\sigma_{2}^{2}}
+            \right)
+      - \frac
+          {1}{2}
+      + \frac
+          {trace(\Gamma_{1}\Gamma_{2}^{-1})}{2n}
+      +\frac
+          {(\beta_{1}-\beta_{2})'Z'Z(\beta_{1}-\beta_{2})}
+          {2n\Gamma_{2}} \\
+    &= -\frac
+        {1}{2}
+          log
+            \left(
+              \frac
+                {\sigma_{1}^{2}}{\sigma_{2}^{2}}
+            \right)
+      - \frac
+          {1}{2}
+      + \frac
+          {1}{2}
+      +\frac
+          {(\beta_{1}-\beta_{2})'Z'Z(\beta_{1}-\beta_{2})}
+          {2n\Gamma_{2}} \\
       &= \frac
             {1}{2}
           \left(
