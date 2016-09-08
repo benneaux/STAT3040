@@ -154,6 +154,7 @@ $(document).ready(function () {
 <p><span class="math">\[
     \begin{aligned}
       I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
+<<<<<<< HEAD
       &amp;= \frac
           {1}{n}
          \int\limits_{\mathbb{R}^{n}} 
@@ -167,6 +168,17 @@ $(document).ready(function () {
       &amp;= \frac
             {1}{n}
           \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
+=======
+      &amp;= \int\limits_{\mathbb{R}^{2}} 
+        f_{\pmb{X}}(x;\pmb{\theta}_{1}) 
+        log
+          \left(
+            \frac
+              {f_{\pmb{X}}(x;\pmb{\theta}_{1})}
+              {f_{\pmb{X}}(x;\pmb{\theta}_{2})}
+          \right)d\pmb{X} \\
+      &amp;= \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
+>>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
           log
             \left(
               \frac
@@ -186,20 +198,34 @@ $(document).ready(function () {
                     \right\}}
             \right)d\pmb{X} \\
       &amp;= -\frac
+<<<<<<< HEAD
             {1}{2n}
           \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
+=======
+            {1}{2}
+          \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
+>>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
           log
             \left(
               \frac
                 {|\Gamma_{1}|}{|\Gamma_{2}|}
             \right)d\pmb{X}  
           - \frac
+<<<<<<< HEAD
               {1}{2n}
             \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
             ({x}-{Z\beta_{1}})' \Gamma_{1}^{-1} ({x}-{Z\beta_{1}})\,d\pmb{X} \\
           &amp;\qquad\qquad + \frac
               {1}{2n}
             \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+=======
+              {1}{2}
+            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{1}})' \Gamma_{1}^{-1} ({x}-{Z\beta_{1}})\,d\pmb{X}
+          + \frac
+              {1}{2}
+            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+>>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
             ({x}-{Z\beta_{2}})' \Gamma_{2}^{-1} ({x}-{Z\beta_{2}})\,d\pmb{X} \\
       &amp;= -\frac
             {n}{2n}
@@ -208,6 +234,7 @@ $(document).ready(function () {
               \frac
                 {\sigma_{1}^{2}}{\sigma_{2}^{2}}
             \right) 
+<<<<<<< HEAD
             \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X}
           - \frac
               {({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}})}{2n\,\Gamma_{1}}
@@ -266,6 +293,23 @@ $(document).ready(function () {
     I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
     &amp;= -\frac
         {1}{2}
+=======
+            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X}
+          - \frac
+              {({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}})}{2\,\Gamma_{1}}
+            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X}
+          + \frac
+              {1}{2\,\Gamma_{2}}
+            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}            
+    \end{aligned}\]</span></p>
+<p>as required.</p>
+<p>Here we need to recall a few things. Firstly, <span class="math">\(f_{\pmb{X}}(x;\pmb{\theta})\)</span> is a pdf and therefore integrates to <span class="math">\(1\)</span>. Secondly, we have that <span class="math">\(({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}}) = \Gamma_{1}\)</span>.</p>
+<p><span class="math">\[
+    I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
+    = -\frac
+        {1}{2}
+>>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
           log
             \left(
               \frac
@@ -274,6 +318,7 @@ $(document).ready(function () {
       - \frac
           {1}{2}
       + \frac
+<<<<<<< HEAD
           {1}{2n\,\Gamma_{2}}
         \left(
           \Gamma_{1} + (\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})
@@ -292,6 +337,25 @@ $(document).ready(function () {
       +\frac
           {(\beta_{1}-\beta_{2})'Z'Z(\beta_{1}-\beta_{2})}
           {2n\Gamma_{2}} \\
+=======
+          {1}{2\,\Gamma_{2}}
+        \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}
+  \]</span></p>
+<p>Now let’s simplify the remaining integral:</p>
+<p><span class="math">\[
+    \begin{aligned}
+       \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
+            ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}
+        &amp;= \Gamma_{1} + \frac{(Z\beta_{1} - Z\beta_{2})'(Z\beta_{1} - Z\beta_{2})}{n} \\
+        &amp;= \Gamma_{1} + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{n} 
+    \end{aligned}
+  \]</span></p>
+<p>Substituting this back into the original, we get:</p>
+<p><span class="math">\[
+    \begin{aligned}
+    I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
+>>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
     &amp;= -\frac
         {1}{2}
           log
@@ -300,12 +364,21 @@ $(document).ready(function () {
                 {\sigma_{1}^{2}}{\sigma_{2}^{2}}
             \right)
       - \frac
+<<<<<<< HEAD
           {1}{2}
       + \frac
           {1}{2}
       +\frac
           {(\beta_{1}-\beta_{2})'Z'Z(\beta_{1}-\beta_{2})}
           {2n\Gamma_{2}} \\
+=======
+          {1}{2}
+      + \frac
+          {1}{2\,\Gamma_{2}}
+        \left(
+          \Gamma_{1} + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{n}
+        \right) \\
+>>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
       &amp;= \frac
             {1}{2}
           \left(
