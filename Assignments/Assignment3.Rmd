@@ -2,11 +2,8 @@
 title: "Assignment3"
 author: "Benjamin Moran"
 date: "30 August 2016"
-<<<<<<< HEAD
+
 output: html_document
-=======
-output: pdf_document
->>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
 ---
 Given the random vector $\pmb{Y}$, the **Kullback-Leibler Divergence** is the **distance**
 between two joint pdfs in the same family, indexed by a **parameter** $\pmb{\theta}$, say
@@ -52,7 +49,6 @@ We can rewrite the expression for the **Kullback-Leibler Divergence** above as:
   $$
     \begin{aligned}
       I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
-<<<<<<< HEAD
       &= \frac
           {1}{n}
          \int\limits_{\mathbb{R}^{n}} 
@@ -66,17 +62,6 @@ We can rewrite the expression for the **Kullback-Leibler Divergence** above as:
       &= \frac
             {1}{n}
           \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
-=======
-      &= \int\limits_{\mathbb{R}^{2}} 
-        f_{\pmb{X}}(x;\pmb{\theta}_{1}) 
-        log
-          \left(
-            \frac
-              {f_{\pmb{X}}(x;\pmb{\theta}_{1})}
-              {f_{\pmb{X}}(x;\pmb{\theta}_{2})}
-          \right)d\pmb{X} \\
-      &= \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
->>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
           log
             \left(
               \frac
@@ -96,34 +81,20 @@ We can rewrite the expression for the **Kullback-Leibler Divergence** above as:
                     \right\}}
             \right)d\pmb{X} \\
       &= -\frac
-<<<<<<< HEAD
-            {1}{2n}
+           {1}{2n}
           \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
-=======
-            {1}{2}
-          \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \, 
->>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
           log
             \left(
               \frac
                 {|\Gamma_{1}|}{|\Gamma_{2}|}
             \right)d\pmb{X}  
           - \frac
-<<<<<<< HEAD
               {1}{2n}
             \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
             ({x}-{Z\beta_{1}})' \Gamma_{1}^{-1} ({x}-{Z\beta_{1}})\,d\pmb{X} \\
           &\qquad\qquad + \frac
               {1}{2n}
             \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
-=======
-              {1}{2}
-            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
-            ({x}-{Z\beta_{1}})' \Gamma_{1}^{-1} ({x}-{Z\beta_{1}})\,d\pmb{X}
-          + \frac
-              {1}{2}
-            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
->>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
             ({x}-{Z\beta_{2}})' \Gamma_{2}^{-1} ({x}-{Z\beta_{2}})\,d\pmb{X} \\
       &= -\frac
             {n}{2n}
@@ -132,7 +103,6 @@ We can rewrite the expression for the **Kullback-Leibler Divergence** above as:
               \frac
                 {\sigma_{1}^{2}}{\sigma_{2}^{2}}
             \right) 
-<<<<<<< HEAD
             \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X}
           - \frac
               {({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}})}{2n\,\Gamma_{1}}
@@ -142,24 +112,7 @@ We can rewrite the expression for the **Kullback-Leibler Divergence** above as:
             \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
             ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}            
     \end{aligned}$$
-    
-=======
-            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X}
-          - \frac
-              {({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}})}{2\,\Gamma_{1}}
-            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1})\,d\pmb{X}
-          + \frac
-              {1}{2\,\Gamma_{2}}
-            \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
-            ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}            
-    \end{aligned}$$
-    
-as required.
->>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
 
-Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a pdf and therefore integrates to $1$. Secondly, we have that $({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}}) = \Gamma_{1}$.
-
-<<<<<<< HEAD
 Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a pdf and therefore integrates to $1$. Secondly, we have that:
 
   $$
@@ -181,8 +134,7 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
   \end{aligned}
   $$
   Substituting these results into the equation leaves:
-=======
->>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
+
   $$
     I(\pmb{\theta}_{1}; \pmb{\theta}_{2}) 
     = -\frac
@@ -195,13 +147,8 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
       - \frac
           {1}{2}
       + \frac
-<<<<<<< HEAD
           {1}{2n\,\Gamma_{2}}
         \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
-=======
-          {1}{2\,\Gamma_{2}}
-        \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
->>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
             ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}
   $$
   
@@ -209,17 +156,10 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
   
   $$
     \begin{aligned}
-<<<<<<< HEAD
        \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
             ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}
         &= E_{1}\left[({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\right] \\
         &= \Gamma_{1} + (\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})
-=======
-       \int\limits_{\mathbb{R}^{2}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
-            ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}
-        &= \Gamma_{1} + \frac{(Z\beta_{1} - Z\beta_{2})'(Z\beta_{1} - Z\beta_{2})}{n} \\
-        &= \Gamma_{1} + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{n} 
->>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
     \end{aligned}
   $$
  
@@ -238,7 +178,6 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
       - \frac
           {1}{2}
       + \frac
-<<<<<<< HEAD
           {1}{2n\,\Gamma_{2}}
         \left(
           \Gamma_{1} + (\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})
@@ -280,21 +219,6 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
             \left(
               \frac
                 {\sigma_{1}^{2}}{\sigma_{2}^{2}}
-=======
-          {1}{2\,\Gamma_{2}}
-        \left(
-          \Gamma_{1} + \frac{(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}{n}
-        \right) \\
-      &= \frac
-            {1}{2}
-          \left(
-          \frac
-          {\sigma_{1}^{2}}{\sigma_{2}^{2}}
-          - log
-            \left(
-              \frac
-                {\sigma_{1}^{2}}{\sigma_{2}^{2}}
->>>>>>> 69f5d16cdbe7c76458ae04e80e0f10d150a42a29
             \right)
             - 1
           \right)
