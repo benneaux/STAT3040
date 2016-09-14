@@ -2,8 +2,7 @@
 title: "Assignment3"
 author: "Benjamin Moran"
 date: "30 August 2016"
-
-output: html_document
+output: pdf_document
 ---
 Given the random vector $\pmb{Y}$, the **Kullback-Leibler Divergence** is the **distance**
 between two joint pdfs in the same family, indexed by a **parameter** $\pmb{\theta}$, say
@@ -121,16 +120,16 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
     \implies  
     \frac
       {({x}-{Z\beta_{1}})'({x}-{Z\beta_{1}})}
-      {2n\Gamma_{1}}
+      {2n\,\Gamma_{1}}
     &= \frac
-      {trace(\Gamma_{1}\Gamma_{1}^{-1})}
-      {2n} \\
-    &= \frac
-        {trace(I_{n})}
-        {n} \\
-    &= \frac
-        {n}{n} \\
-    &= 1    
+      {tr(\Gamma_{1}\Gamma_{1}^{-1})}
+      {2n}
+    = \frac
+        {tr(I_{n})}
+        {2n}
+    = \frac
+        {n}{2n}
+    = \frac{1}{2}    
   \end{aligned}
   $$
   Substituting these results into the equation leaves:
@@ -192,10 +191,10 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
       - \frac
           {1}{2}
       + \frac
-          {trace(\Gamma_{1}\Gamma_{2}^{-1})}{2n}
+          {tr(I_{n})\sigma_{1}^{2}}{2n\,\sigma_{2}^{2}}
       +\frac
           {(\beta_{1}-\beta_{2})'Z'Z(\beta_{1}-\beta_{2})}
-          {2n\Gamma_{2}} \\
+          {2n\,\sigma_{2}^{2}} \\
     &= -\frac
         {1}{2}
           log
@@ -206,10 +205,10 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
       - \frac
           {1}{2}
       + \frac
-          {1}{2}
+          {\sigma_{1}^{2}}{2\,\sigma_{2}^{2}}
       +\frac
           {(\beta_{1}-\beta_{2})'Z'Z(\beta_{1}-\beta_{2})}
-          {2n\Gamma_{2}} \\
+          {2n\,\sigma_{2}^{2}} \\
       &= \frac
             {1}{2}
           \left(
@@ -224,7 +223,7 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
           \right)
       + \frac
           {(\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})}
-          {2n\sigma_{2}^{2}}
+          {2n\,\sigma_{2}^{2}}
     \end{aligned}
   $$
   
