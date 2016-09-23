@@ -1,0 +1,137 @@
+---
+title: "Assignment3R"
+author: "Benjamin Moran"
+date: "11 September 2016"
+output: html_document
+---
+```{r Setup, include=FALSE}
+require(broom)
+require(knitr)
+require(tidyr)
+require(magrittr)
+require(ggfortify)
+require(ggplot2)
+```
+
+
+```{r Q7a, eval = FALSE}
+
+setwd("/Users/benjamin/R/STAT3040/Data")
+
+```
+
+8.	Store the data from the  file to a variable in R:
+
+```{r Q8a}
+SF.US <- readRDS("GTSugarFatTS.rds")
+```
+
+9.	Look at the structure of the variable: 
+
+```{r Q9a, echo=FALSE}
+
+head(SF.US)
+
+```
+
+###Linear Regression in R
+
+
+1.	Find the time range of dataset:
+
+```{r Q1b}
+
+SF.US[1,1]
+
+dim(SF.US)
+
+SF.US[152,1]
+
+```
+2.	Construct two time series for Sugar and Fat searches in the United States within the range of observation times:
+
+```{r Q2b}
+
+Sugar.TS <- ts(SF.US[,2], start = c(2004,1), end = c(2016,8), frequency = 12) 
+Sugar.TS
+
+Fat.TS <- ts(SF.US[,3], start = c(2004,1), end = c(2016,8), frequency = 12) 
+Fat.TS
+
+Fat.TS2 <- fortify(Fat.TS) %>% 
+  separate(Index, c("Year", "Month", "Day")) %>%
+  subset(select = -Day)
+
+Sugar.TS2 <- fortify(Sugar.TS) %>% 
+  separate(Index, c("Year", "Month", "Day")) %>%
+  subset(select = -Day)
+```
+
+
+3.	Plot the time series of Sugar.TS and Fat.TS:
+
+```{r Q3b}
+
+plot.ts(Sugar.TS, type="l") 
+plot.ts(Fat.TS, type="l") 
+plot.ts(cbind(Sugar.TS, Fat.TS), type="l") 
+ts.plot(cbind(Sugar.TS, Fat.TS), type="l")
+
+
+```
+
+```{r Q3b alt}
+ggplot(Fat.TS2, aes(Month, Data, group = Year, colour = Year)) + 
+  geom_line()
+
+ggplot(Sugar.TS2, aes(Month, Data, group = Year, colour = Year)) + 
+  geom_line()
+
+```
+
+4.	Construct a time variable for observation times:
+```{r Q4b}
+TimeTS <- time(Sugar.TS) 
+TimeTS
+```
+
+5.	Plot the scatterplot matrix:
+
+```{r Q5b}
+data <- data.frame(Sugar = Sugar.TS, Time = TimeTS, Fat = Fat.TS)
+pairs(cbind(Sugar = Sugar.TS, Time = TimeTS, Fat = Fat.TS))
+```
+
+6. Fit two regression models
+$$
+  \begin{cases}
+    \begin{aligned}
+      \text{Model 1: Sugar}_{t} &=	\beta_{1} +  \beta_{2}t +  \beta_{3}\text{Fat}_{t} + \mathcal{W}_{t} \\
+       \text{Model 2: Sugar}_{t} &=	\beta_{1} +  \beta_{2}t +  \beta_{3}t^{2} +  \beta_{4}\text{Fat}_{t} + \mathcal{W}_{t}
+    \end{aligned}
+  \end{cases}
+$$
+```{r Q6b}
+fit1 <- lm(Sugar.TS ~ TimeTS + Fat.TS) 
+TimeTS2 <- TimeTS^2
+fit2 <- lm(Sugar.TS ~ TimeTS + TimeTS2 + Fat.TS)
+
+```
+
+7.	Summary of the regression parameters estimations: 
+
+```{r Q7b}
+glance(fit1)
+tidy(fit1)
+glance(fit2)
+tidy(fit2)
+```
+
+
+8.	Compare the values of AIC for two models:
+
+```{r Q8b}
+AIC(fit1)/152 - log(2*pi)
+AIC(fit2)/152 - log(2*pi)
+```
+
