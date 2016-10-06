@@ -2,7 +2,8 @@
 title: "Assignment3"
 author: "Benjamin Moran"
 date: "30 August 2016"
-output: pdf_document
+
+output: html_document
 ---
 Given the random vector $\pmb{Y}$, the **Kullback-Leibler Divergence** is the **distance**
 between two joint pdfs in the same family, indexed by a **parameter** $\pmb{\theta}$, say
@@ -158,7 +159,8 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
        \int\limits_{\mathbb{R}^{n}}f_{\pmb{X}}(x;\pmb{\theta}_{1}) \,
             ({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\,d\pmb{X}
         &= E_{1}\left[({x}-{Z\beta_{2}})'({x}-{Z\beta_{2}})\right] \\
-        &= \Gamma_{1} + (\beta_{1} - \beta_{2})'Z'Z(\beta_{1} - \beta_{2})
+        &= E_{1}\left[(x - \beta_{1} + \beta_{1} - \beta_{2})\right] \\
+        &= E_{1}\left[(x - \beta_{1})'(x - \beta_{1}) + 2(x - \beta_{1})'(\beta_{1} - \beta_{2}) + (\beta_{1} - \beta_{2})'(\beta_{1} - \beta_{2})\right]
     \end{aligned}
   $$
  
@@ -194,7 +196,7 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
           {tr(I_{n})\sigma_{1}^{2}}{2n\,\sigma_{2}^{2}}
       +\frac
           {(\beta_{1}-\beta_{2})'Z'Z(\beta_{1}-\beta_{2})}
-          {2n\,\sigma_{2}^{2}} \\
+          {2n\,\Gamma_{2}} \\
     &= -\frac
         {1}{2}
           log
@@ -208,7 +210,7 @@ Here we need to recall a few things. Firstly, $f_{\pmb{X}}(x;\pmb{\theta})$ is a
           {\sigma_{1}^{2}}{2\,\sigma_{2}^{2}}
       +\frac
           {(\beta_{1}-\beta_{2})'Z'Z(\beta_{1}-\beta_{2})}
-          {2n\,\sigma_{2}^{2}} \\
+          {2n\,\Gamma_{2}} \\
       &= \frac
             {1}{2}
           \left(
