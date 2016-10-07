@@ -3,9 +3,9 @@ title: "Assignment 4"
 author: "Benjamin Moran"
 date: "8 September 2016"
 output:
-  pdf_document: default
   html_document:
     graphics: yes
+  pdf_document: default
 ---
 
 ```{r setup, include = FALSE}
@@ -25,24 +25,26 @@ knitr::opts_chunk$set(echo = FALSE, collapse = TRUE, fig.align="center", fig.wid
 When assessing changes in the Earth's climate over periods of hundreds or thousands of years, climate scientists and geologists often look to layers of sediment or sedimentary rock know as *Rhythmites*. These layers are the result of geological/ecological processes with an easily observable periodicity/regularity and as such can provide insights into any longitudinal changes in the processes that cause their formation. 
 
 ## Varves
-A *Varve* is a particular type of *Rhythmite* that forms in the presence of fresh or brackish water. Thus, they often present a record of **deglaciation** in the area where they are observed. By measuring the depth and composition (ratio of silt & sand to clay) of each varve, we can discern a record of the paleoclimactic conditions in that area over a period of thousands of years, or at least for the period during which deglaciation occured.
+A *Varve* is a particular type of *Rhythmite* that forms in the presence of fresh or brackish water. Thus, they often present a record of **deglaciation** in the area where they are observed. By measuring the depth and composition (ratio of silt & sand to clay) of each varve, we can discern a record of the paleoclimactic conditions in that area over a period of thousands of years, or at least for the period during which de-glaciation occurred.
 
-## astsa::varve Dataset
+### astsa::varve Dataset
 
-The *varve* dataset contained in the *astsa* package for **R**, contains a record of yearly glacial deposits in Massachusetts, New England in a period from approximately 11,834 years ago (the time deglaciation began in the area) to approximately 11,200 years ago (the time deglaciation ended). The time-series data contains a record of the thicknesses of each varve from this location.
+The *varve* dataset contained in the *astsa* package for **R**, contains a record of yearly glacial deposits in Massachusetts, New England in a period from approximately 11,834 years ago (the time de-glaciation began in the area) to approximately 11,200 years ago (the time de-glaciation ended). The time-series data contains a record of the thicknesses of each varve from this location.
 
 # Analysis
 
-### Plotting the Time-series $x_{t}$.
+In order to analyse this time-series we would like to ensure that it is a *stationary* time-series. In order for this to be the case we need to ensure that the time-series is *homoscedastic* - that the time-series has a constant variance over time - and that the *mean* of the time-series does not depend on time. To do this we will employ a number of transformations: a *logarithmic transformation* to stabilise the variance; and *differencing* to stabilise the mean. These processes will be explained further when relevant. 
 
-Firstly, we can plot the time-series in its raw form. 
+##### Plotting the Time-series $x_{t}$.
+
+Initially, we can plot the time-series in its raw form to get a sense as to whether or not it is already a stationary time-series. 
 
 ```{r 2Q1varve}
 data <- fortify(varve)
 x <- data$Index
 y <- data$Data
 
-plot(y ~ x, axes=F, xlab="", ylab="", pch=21, cex = 0.5, type = 'o', bg="red")
+plot(y ~ x, axes=F, xlab="", ylab="", pch=21, cex = 0.75, type = 'o', bg="red")
 axis(1, at=c(1,seq(40,640,40)), label=c(1,seq(40,640,40)), tick=F, family="serif", cex.axis=1.5)
 axis(2, at=seq(round(min(y)),round(max(y)),20), label=seq(round(min(y)),round(max(y)),20), tick=F, las=2, family="serif", cex.axis=1.5)
 text(min(x) + 170, max(y) - 20,"Sedimentary deposits from \none location in Massachusetts \nfor 634 years, beginning \nnearly 12,000 years ago.", adj=1, cex=1.25,family="serif")
@@ -52,13 +54,13 @@ text(min(x) + 170, max(y) - 20,"Sedimentary deposits from \none location in Mass
 
 In order for us to perform any kind of analysis on this time-series, we need to confirm that it is **homoscedastic**, or that the variance of the time-series does not change over time. We can calculate the variance of the first half of the time-series and compare it with the variance of the second half to easily check. The variance of the first half $\approx$ `r round(var(y[1:317]),2)`; the variance of the second half $\approx$ `r round(var(y[318:634]),2)`. These are significantly different, so we will need to construct a *logarithmic transformation* to ensure that the time-series is *homoscedastic*.
 
-## Logarithmic Transformation
+#### Logarithmic Transformation
 
-We construct a *logarithmic transformation* via the following method: if $x_{t}$ is a time series that is *heteroscedastic* (its variance changes over time), the the transformation $y_{t} = log(x_{t})$ is a *homoscedastic* time-series.
+We construct a *logarithmic transformation* via the following method: if $x_{t}$ is a time series then the *log-transformed* time-series $y_{t} = log(x_{t})$.
 
-### Plotting the Transformed Time-series $y_{t}$.
+##### Plotting the Transformed Time-series $y_{t}$.
 
-We can plot the original time-series $x_{t}$ alongside our transformation $y_{t}$to observe the changes made by this process.
+We can plot the original time-series $x_{t}$ alongside our transformation $y_{t}$ to observe the changes made by this process.
 
 ```{r 2Q4}
 par(mfrow=c(2,1))
@@ -67,26 +69,30 @@ x <- data$Index
 y1 <- data$Data
 y2 <- log(y1) 
 
-plot(y1 ~ x, axes=F, xlab="", ylab="", pch=21, cex = 0.5, type = 'o', bg="red")
+plot(y1 ~ x, axes=F, xlab="", ylab="", pch=21, cex = 0.75, type = 'o', bg="red")
 axis(1, at=c(1,seq(40,640,40)), label=c(1,seq(40,640,40)), tick=F, family="serif", cex.axis=1.5)
 axis(2, at=seq(round(min(y1)),round(max(y1)),40), label=seq(round(min(y1)),round(max(y1)),40), tick=F, las=2, family="serif", cex.axis=1.5)
 text(min(x) + 170, max(y1) - 20,"Original Time-series", adj=1, cex=1.25,family="serif")
 
-plot(y2 ~ x, axes=F, xlab="", ylab="", pch=21, cex = 0.5, type = 'o', bg="red")
+plot(y2 ~ x, axes=F, xlab="", ylab="", pch=21, cex = 0.75, type = 'o', bg="red")
 axis(1, at=c(1,seq(40,640,40)), label=c(1,seq(40,640,40)), tick=F, family="serif", cex.axis=1.5)
 axis(2, at=seq(round(min(y2)),round(max(y2)),1), label=seq(round(min(y2)),round(max(y2)),1), tick=F, las=2, family="serif", cex.axis=1.5)
 text(min(x) + 170, max(y2),"Logarithmic Transformation", adj=1, cex=1.25,family="serif")
 ```
 
-The scale of the data values have greatly reduced in the transformed time-series. The variance of the first half $\approx$ `r round(var(y2[1:317]),4)`; the variance of the second half $\approx$ `r round(var(y2[318:634]),4)`. These are an improvement on the previous time-series, but still different, so we can't yet say that the time-series is *homoscedastic*.
+The scale of the data values have greatly reduced in the transformed time-series. The variance of the first half $\approx$ `r round(var(y2[1:317]),4)`; the variance of the second half $\approx$ `r round(var(y2[318:634]),4)`. These are an improvement on the previous time-series, but still different, so we can't yet say that the time-series is *homoscedatic* or *stationary*. However, we have succeeded in stabilising the variance of the time-series to some extent, which was the primary benefit of the performing the *log-transformation*. In the next section we will test to see if this transformation alone has succeeded in creating a stationary time-series.
 
-## Normality
+## Stationarity
 
-We can further test whether or not the transformed time-series $y_{t}$ is homoscedastic by performing a **Shapiro-Wilk Test** on the data. If the data is homoscedastic, then the data is also normally-distributed. Thus if the results of running the **Shapiro-Wilk Test** confirm the null-hypothesis, then we can say that the data is homoscedastic and continue with our analysis.
+We have a number of different ways to test if a time-series is stationary: **Autocorrelaton function** and the **Shapiro-Wilk Test**, both of which test - to some extent - the *normality* of the time-series.  
 
-First we plot the histograms of the orginal - $x_{t}$ - and transformed - $y_{t}$ - time-series.
+### Normality
 
-### Histograms of $x_{t}$ and $y_{t}$.
+We can further test whether or not the transformed time-series $y_{t}$ is stationary by performing a **Shapiro-Wilk Test** on the data. If the data is stationary, then the data is also normally-distributed. Thus if the results of running the **Shapiro-Wilk Test** confirm the null-hypothesis, then we can say that the data is stationary and continue with our analysis.
+
+First we plot the histograms of the original - $x_{t}$ - and transformed - $y_{t}$ - time-series.
+
+##### Histograms of $x_{t}$ and $y_{t}$.
 
 ```{r 2Q5histograms}
 par(mfrow=c(1,2))
@@ -96,31 +102,33 @@ hist(y2, main="Logarithmic Transformation", breaks = 20, xlab="", probability = 
 lines(density(y2), lwd = 3, col = "red")
 ```
 
-The original time-series $x_{t}$ is obviously heavily-skewed and the transformed time-series $y_{t}$ looks farily skewed as well, suggesting that the transformed time-series is still not homoscedastic. We can confirm this via the Shapiro-Wilk Test.
+The original time-series $x_{t}$ is obviously heavily-skewed and the transformed time-series $y_{t}$ looks fairly skewed as well, suggesting that the transformed time-series is still not stationary. We can confirm this via the Shapiro-Wilk Test.
 
-### Shapiro-Wilk Test
+#### Shapiro-Wilk Test
 
-Running the test on the orginal time-series $x_{t}$ with a significance level of $\alpha = 0.05$ returns a p-value of $\approx$ `r round(shapiro.test(y1)$p.value,4)` to four decimal places. Therefore, we reject the null-hypothesis that the time-series data is normally distributed, which implies that the original time-series $x_{t}$ is heteroscedastic. 
+Running the test on the original time-series $x_{t}$ with a significance level of $\alpha = 0.05$ returns a p-value of $\approx$ `r round(shapiro.test(y1)$p.value,4)` to four decimal places. Therefore, we reject the null-hypothesis that the time-series data is normally distributed, which implies that the original time-series $x_{t}$ is heteroscedastic. 
 Running the test on the transformed time-series $y_{t}$ with a significance level of $\alpha = 0.05$ returns a p-value of $\approx$ `r round(shapiro.test(y2)$p.value,4)` to four decimal places. Therefore, we reject the null-hypothesis that the time-series data is normally distributed, which implies that the transformed time-series $y_{t}$ is heteroscedastic. 
 
-## Autocorrelation
+### Autocorrelation
 
-Further proof of the results can be obtained by plotting the Autocorrelation Function (ACF) of each time-series. A time-series is homoscedastic if more than 95% of the values output by the ACF fall within a 95% normal confidence interval: i.e. if this condition holds, then the data is normally distributed.
+Further proof of the results can be obtained by plotting the Sample Autocorrelation Function (SACF) of each time-series. A time-series is stationary if more than 95% of the values output by the SACF fall within a 95% normal confidence interval: i.e. if this condition holds, then the data is normally distributed.
 
-First, we plot the ACF of the original time-series $x_{t}$.
+First, we plot the SACF of the original time-series $x_{t}$.
 
 ```{r 2Q6sampleACF1}
 acf(y1, 500, main = "", axes=F, ylab="")
 axis(1, at=seq(0,500,100), label=seq(0,500,100), tick=F, family="serif", cex.axis=1.5)
 axis(2, at=seq(-0.2,1,0.2), label=seq(-0.2,1,0.2), tick=F, las=2, family="serif", cex.axis=1.5)
-text(500, 0.8,"Autocorrelation: Original Time-series", adj=1, cex=2,family="serif")
+text(500, 0.8,"Sample Autocorrelation: Original Time-series", adj=1, cex=2,family="serif")
 ```
 
 ```{r muacf1, include = FALSE}
-mu_acf1 <- mean(abs(acf(y1,500)$acf) < qnorm((1 + 0.95)/2)/sqrt(634))
+mu_sacf1 <- mean(abs(acf(y1,500)$acf) < qnorm((1 + 0.95)/2)/sqrt(634))
 ```
 
-It seems that this data does not meet the conditions for homoscedacity specified above. We can confirm this by evalualting the following expression in R: $mean(abs(acf(x_{t},500)\$acf)<qnorm((1 + 0.95)/2)/sqrt(634))=$ `r  mu_acf1` $< 0.95 \implies x_{t}$ is not homoscedastic. 
+It seems that this data does not meet the conditions for stationarity specified above. Graphically, the SACF of a stationary time series will quickly go to zero, with any variation falling within the CI lines. If the time-series is not stationary, the SACF will take a while to move to zero; it will cycle between negative and positive values before eventually settling near zero at a high lag value. The graph above clearly shows that the time-series is not stationary.
+
+We can confirm this fact by evaluating the following expression in R: $mean(abs(acf(x_{t},500)\$acf)<qnorm((1 + 0.95)/2)/sqrt(634))=$ `r  mu_sacf1` $< 0.95 \implies x_{t}$ is not stationary. 
 
 Repeating the same analysis for the transformed time-series $y_{t}$.
 
@@ -128,57 +136,57 @@ Repeating the same analysis for the transformed time-series $y_{t}$.
 acf(y2, 500, main="", axes=F, ylab="")
 axis(1, at=seq(0,500,100), label=seq(0,500,100), tick=F, family="serif", cex.axis=1.5)
 axis(2, at=seq(-0.2,1,0.2), label=seq(-0.2,1,0.2), tick=F, las=2, family="serif", cex.axis=1.5)
-text(500, 0.8,"Autocorrelation: Logarithmic Transformation", adj=1, cex=2,family="serif")
+text(500, 0.8,"Sample Autocorrelation: Logarithmic Transformation", adj=1, cex=2,family="serif")
 ```
 
 ```{r muacf2, include = FALSE}
-mu_acf2 <- mean(abs(acf(y2,500)$acf) < qnorm((1 + 0.95)/2)/sqrt(634))
+mu_sacf2 <- mean(abs(acf(y2,500)$acf) < qnorm((1 + 0.95)/2)/sqrt(634))
 ```
 
-Again, it seems that this data does not meet the conditions for homoscedacity specified above. We can confirm this by evalualting the following expression in R: $mean(abs(acf(y_{t},500)\$acf)<qnorm((1 + 0.95)/2)/sqrt(634))=$ `r  mu_acf2` $< 0.95 \implies y_{t}$ is not homoscedastic. 
+Again, it seems that this data does not meet the conditions for stationarity specified above. We can confirm this by evaluating the following expression in R: $mean(abs(acf(y_{t},500)\$acf)<qnorm((1 + 0.95)/2)/sqrt(634))=$ `r  mu_sacf2` $< 0.95 \implies y_{t}$ is not stationary. 
 
-# Differencing
+## Differencing
 
-We can create a homoscedastic time-series from the transformed time-series $y_{t}$ via *Differenceing*. This method involves creating a new time-series $u_{t}$ using the following process:
+Whilst the variance of our time-series has been reduced, the skew of the histograms produced above tells us that the mean of our transformed time-series $y_{t}$ is not constant over time. We can remedy this via *Differencing*.
+
+It is possible create a stationary time-series from the transformed time-series $y_{t}$ via *Differencing*. This method involves creating a new time-series $u_{t}$ using the following process:
 $$
 u_{t} := \nabla y_{t} = y_{t} - y_{t-1}.
 $$
 where $\nabla$ is the differencing operator. If we define $y_{t}$ in the above equation as the transformed time-series form above, we get a new time-series to test. 
 
-### Plotting the Differenced Time-series $u_{t}$.
+##### Plotting the Differenced Time-series $u_{t}$.
 
 Firstly, we can plot the differenced time-series $u_{t}$: 
 
 ```{r 2Q7differencing}
 u <- diff(y2, 1)
 x_diff <- x[2:634]
-plot(u ~ x_diff, axes=F, xlab="", ylab="", pch=21, cex = 0.5, type = 'o',bg="red")
+plot(u ~ x_diff, axes=F, xlab="", ylab="", pch=21, cex = 0.75, type = 'o',bg="red")
 axis(1, at=c(1,seq(40,600,40),633), label=c(1,seq(40,600,40),633), tick=F, family="serif", cex.axis=1.5)
 axis(2, at=c(-1.8,-0.9,0,0.9,1.8), label=c(-1.8,-0.9,0,0.9,1.8), tick=F, las=2, family="serif", cex.axis=1.5)
 text(600, max(u),"Differenced Time-series", adj=1, cex=2,family="serif") 
 ```
 
-### Histogram of the Differenced Time-series $u_{t}$.
+Compared with the time-series plotted above, $u_{t}$ appears to be - roughly and symmetrically - centred about zero, implying that any variability in its mean has been removed. We can test this hypothesis using the same methods as before. 
+
+We can get a better sense of the normality of the time-series $u_{t}$ by plotting its histogram.
+
+##### Histogram of the Differenced Time-series $u_{t}$.
 
 ```{r uhist}
 hist(u, main="Differenced Time-series", breaks = 20, xlab="", probability = TRUE)
 lines(density(u), lwd = 2, col = "red")
 ```
 
-This is much more promising. We can confirm this via the Shapiro-Wilk Test.
+This is much more promising; it looks much more normal with very little skew. We can confirm this via the Shapiro-Wilk Test.
 
 ### Shapiro-Wilk Test
 
-Running the test on the orginal time-series $u_{t}$ with a significance level of $\alpha = 0.05$ returns a p-value of $\approx$ `r round(shapiro.test(u)$p.value,4)` to four decimal places. Therefore, we fail to reject the null-hypothesis that the time-series data is normally distributed, which implies that the original time-series $u_{t}$ is homoscedastic. 
-
-# Interpretations
-
-All of the transformations we have performed on our time-series data up to this point have been an attempt to arrive at a *stationary* time-series that we can analyse. In order to arrive at this, we have focused on finding a time-series that is *homoscedastic* as a proxy for *stationarity*.  
-Can you think of a practical interpretation for the time series $u_{t}$? 
-*Hint: For $\mid p \mid$ close to zero, $\text{log}(1 + p) \approx p$; let $p = (x_{t} - x_{t-1})/x_{t-1}$.*
+Running the test on the differenced time-series $u_{t}$ with a significance level of $\alpha = 0.05$ returns a p-value of $\approx$ `r round(shapiro.test(u)$p.value,4)` to four decimal places. Therefore, we fail to reject the null-hypothesis that the time-series data is normally distributed, which implies that the differenced time-series $u_{t}$ is stationary.
 
 ## Sample Autocorrelation
-Plot the sample ACF of the time series $u_{t}$ . 
+Plot the SACF of the time series $u_{t}$ . 
 
 ```{r 2Q9sampleACF}
 acf(u, 500, main = "", axes=F, ylab="")
@@ -187,15 +195,26 @@ axis(2, at=seq(-0.2,1,0.2), label=seq(-0.2,1,0.2), tick=F, las=2, family="serif"
 text(500, 0.8,"Sample Autocorrelation: Differenced Time-series", adj=1, cex=2,family="serif")
 ```
 
+We can see here that it drops towards zero after only two lags and then almost entirely stays within the 95% CIs for the remaining lags. This indicates that the time-series $u_{t}$ is most likely stationary.
 ```{r musacf, include=FALSE}
 obj <- acf(u, 500)
 mu_sacf <- mean(abs(obj$acf) < qnorm((1 + 0.95)/2)/sqrt(633))
 ```
 
+We can confirm this by evaluating the following expression in R: $mean(abs(acf(u_{t},500)\$acf)<qnorm((1 + 0.95)/2)/sqrt(634))=$ `r  round(mu_sacf,4)` $> 0.95 \implies u_{t}$ is stationary.
 
-We can confirm this by evalualting the following expression in R: $mean(abs(acf(u_{t},500)\$acf)<qnorm((1 + 0.95)/2)/sqrt(634))=$ `r  round(mu_sacf,4)` $> 0.95 \implies u_{t}$ is homoscedastic. 
+By stabilising the variance of our original time-series $x_{t}$ via a *log-transformation* and then stabilising the mean of the transformed time-series $y_{t}$ via *differencing*, the resulting time-series $u_{t}$ is a *stationary* time-series as desired.
 
-# Moving Average Model
+# Interpretations
+
+The time-series $u_{t}$ has been *detrended*: by a series of transformations we have eliminated any underlying variance caused by other factors (e.g. seasonality) that may obscure the effect that we want to study (climactic change). 
+
+...
+
+# Not Completed:
+
+## Modelling $u_{t}$: Moving Average Model
+
 Based on the sample ACF of the time series $u_{t}$, argue that the following model might be reasonable. Consider the moving average model.
 $$
   U_{t} =	\mu + \mathcal{W}_{t}	- \theta\mathcal{W}_{t-1}
@@ -210,6 +229,6 @@ $$
   \end{cases}
 $$
     
-11. Based on the results of Item 10, use $\widehat{\gamma}_{U}(0)$ and $\widehat{\gamma}_{U}(1)$ to derive estimates of $\theta$ and $\sigma_\mathcal{W}^{2}$. This is an application of the method of moments from classical statistics, where estimators of the parameters are derived by equating sample moments to theoretical moments.
+## Estimating Model Parameters
 
-# References:
+Based on the results of Item 10, use $\widehat{\gamma}_{U}(0)$ and $\widehat{\gamma}_{U}(1)$ to derive estimates of $\theta$ and $\sigma_\mathcal{W}^{2}$. This is an application of the method of moments from classical statistics, where estimators of the parameters are derived by equating sample moments to theoretical moments.

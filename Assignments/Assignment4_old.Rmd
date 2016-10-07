@@ -1,0 +1,171 @@
+---
+title: "Assignment4"
+author: "B. Moran"
+date: "23 September 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(broom)
+require(astsa)
+require(knitr)
+knitr::opts_chunk$set(collapse = TRUE, fig.align="center")
+```
+
+2.	Plot the CCF between SOI and Recruitment:
+
+```{r Q2 CCF}
+obj <- ccf(soi, rec, 40)
+peak.lag <- obj$lag[which.max(abs(obj$acf))]
+peak.acf <- obj$acf[which.max(abs(obj$acf))]
+plot(obj)
+segments(peak.lag, 0,peak.lag, peak.acf, lty = 1, col="red", lwd = 3)
+```
+
+3.	Construct the regression model:
+$$
+  R_{t} =  \beta_{1} +  \beta_{2}S_{t-6} + \mathcal{W}_{t}
+$$
+
+```{r Q3 Regression}
+fish <-  ts.intersect(
+  rec, 
+  soiL6 = lag(soi, -6),
+  dframe=TRUE
+  )
+
+fit <- lm(
+  rec ~ soiL6,
+  data=fish,
+  na.action=NULL
+  )
+
+  kable(cbind(tidy(fit),glance(fit)[1:6]))
+  length(rec)
+
+  # We can also do the regression 'by hand' by specifying values for t
+  # and t-h, then indexing each vector - rec & soi - accordingly.
+fit2 <- lm(
+  rec[7:453] ~ soi[1:447], # Here we match the lag term (t-6).
+  na.action=NULL
+  )
+
+  kable(cbind(tidy(fit2),glance(fit2)[1:6]))
+  
+fish3 <-  ts.intersect(
+  rec, 
+  soiL6 = lag(soi, -6),
+  recL1 = lag(rec, -1),
+  dframe=TRUE
+  ) 
+
+fit3 <- lm(
+  rec ~ soiL6 + recL1,
+  data=fish3,
+  na.action=NULL
+  )  
+
+  kable(cbind(tidy(fit3),glance(fit3)[1:6]))
+par(mfrow=c(1,2))  
+plot(fit3)
+```
+
+### Smoothing Time Series in R
+
+```{r Q1 cleanup, include=FALSE}
+rm(list = ls())
+```
+Melting glaciers deposit yearly layers of sand and silt during the spring melting seasons, which can be reconstructed yearly over a period ranging from the time deglaciation began in New England (about 12,600 years ago) to the time it ended (about 6,000 years ago). Such sedimentary deposits, called varves, can be used as proxies for paleoclimatic parameters, such as temperature, because, in a warm year, more sand and silt are deposited from the receding glacier (for further information, see [1]). The time series data of the thicknesses of the yearly varves collected from one location in Massachusetts for 634 years, beginning 11,834 years ago is stored in the variable varve from astsa package.
+
+
+1.	Plot the time series of varves: 
+
+```{r 2Q1 varve}
+x <- varve
+plot.ts(x)
+```
+
+2.	Does the time series $x_{t}$ seem to be stationary?
+
+No it does not. The variance of the time-series seems to increase over time, implying that it is **heteroscedastic**.
+
+3.	Consider a series of random variables $(Y_{1},Y_{2},\cdots)$. If all random variables $Y_{t}$ have the same finite variance, the series is called homoscedastic, and otherwise, that is, if a subset of the series has a variance different from the other, it is called heteroscedastic. Obviously, a stationary time series is homoscedastic.
+
+Compute the sample variance of the glacial varves time series, $x_{t}$, over the rst half and the second half of the data and argue that the glacial varves series, $x_{t}$, exhibits heteroscedasticity. 
+
+```{r 2Q3 heteroscedasticity}
+length(x)
+var(x[1:317])
+var(x[318:634])
+```
+
+Because the Variance of the second half = `r var(x[318:634])` is about four times the variance of the first half = `r var(x[1:317])`, we can't really use it.
+
+4.	Because the variation in thicknesses increases in proportion to the amount deposited, a logarithmic transformation could remove the nonstationarity observable in the variance as a function of time. Construct the time series $y_{t} := log(x_{t})$. The *logarithmic transformation* tends to suppress larger fluctuations that occur over portions of the series where the underlying values are larger. Plot the time series $x_{t}$ and $y_{t}$ together and compute the sample variance of $y_{t}$ over the first half and the second half of the data.
+
+```{r 2Q4}
+y <- log(x) 
+plot.ts(cbind(x,y)) 
+var(y[1:317]) 
+var(y[318:634])
+```
+
+These are better, but not great.
+
+5.	Plot the histograms of the time series $x_{t}$ and $y_{t}$ to see whether the approximation to normality is improved by transforming the data. Run a Normality test on them.
+
+```{r 2Q5 histograms}
+par(mfrow=c(1,2))
+hist(x)
+hist(y)
+kable(tidy(shapiro.test(x)))
+kable(tidy(shapiro.test(y)))
+```
+
+6.	Examine the sample ACF of the time series $x_{t}$ and $y_{t}$. 
+
+```{r 2Q6 sample ACF}
+acf(x, 100)
+mean(acf(x,100)$acf < 0.1)
+acf(x, 500) 
+acf(y, 100) 
+acf(y, 500)
+```
+
+7.	Construct the new time series $u_{t} := \nabla y_{t} = y_{t} - y_{t-1}$. Argue that differencing the logged varve data produces a reasonably stationary series.
+
+```{r 2Q7 differencing}
+u <- diff(y, 1) 
+plot.ts(u) 
+hist(u) 
+kable(tidy(shapiro.test(u)))
+```
+
+8.	Can you think of a practical interpretation for the time series $u_{t}$? 
+*Hint: For $\mid p \mid$ close to zero, $\text{log}(1 + p) \approx p$; let $p = (x_{t} - x_{t-1})/x_{t-1}$.*
+
+9.	Plot the sample ACF of the time series $u_{t}$ . 
+
+```{r 2Q9 sample ACF}
+acf(u, 100)
+acf(u,500)
+obj <- acf(u, 500)
+
+mean(abs(obj$acf) < 0.05)
+```
+
+10.	Based on the sample ACF of the time series $u_{t}$, argue that the following model might be reasonable. Consider the moving average model.
+$$
+  U_{t} =	\mu + \mathcal{W}_{t}	- \theta\mathcal{W}_{t-1}
+$$
+If $\mathcal{W}_{t}$ are assumed WN$[0,\sigma_{\mathcal{W}}^{2}]$, then $U_{t}$ is a stationary time series. Show that
+$$
+  \gamma_{U}(h) =
+  \begin{cases}
+    \sigma_{\mathcal{W}}^{2}(1 + \theta^{2})  &\text{for } h = 0 \\
+    -\theta\sigma_{\mathcal{W}}^{2} &\text{for } h = \pm 1 \\
+    0 &\text{for } \mid h \mid \> > 1
+  \end{cases}
+$$
+    
+11. Based on the results of Item 10, use $\widehat{\gamma}_{U}(0)$ and $\widehat{\gamma}_{U}(1)$ to derive estimates of $\theta$ and $\sigma_\mathcal{W}^{2}$. This is an application of the method of moments from classical statistics, where estimators of the parameters are derived by equating sample moments to theoretical moments.
