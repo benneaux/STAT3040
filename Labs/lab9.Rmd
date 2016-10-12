@@ -1,0 +1,207 @@
+---
+title: "STAT3040 : Time Series Analysis 2016 Computer Lab. 9 - Week 10"
+output: html_notebook
+---
+
+```{r setup, include = FALSE}
+require(broom)
+require(astsa)
+require(knitr)
+require(tidyr)
+require(magrittr)
+require(ggfortify)
+require(ggplot2)
+require(ggthemes)
+knitr::opts_chunk$set(echo = FALSE, collapse = TRUE, fig.align="center", fig.width=15, fig.height = 7.5)
+```
+
+### 1.  ARMA Models in R
+
+1.  Generate a time series from the MA(3) model
+$$
+X_t=\mathcal{W}_t + 0.8\mathcal{W}_{t-1} + 0.1\mathcal{W}_{t-2} - 0.7\mathcal{W}_{t-3} 
+$$
+```{r ARMA1}
+MA3 <- arima.sim(list(order=c(0,0,3), ma=c(0.8,0.1,-0.7)), n=1000)
+acf(MA3)
+pacf(MA3)
+```
+2.  Generate a time series from the AR(2) model
+$$
+X_t=X_{t-1} - 0.16 X_{t-2} + \mathcal{W}_{t} 
+$$
+```{r ARMA2}
+AR2 <- arima.sim(list(order=c(2,0,0), ar=c(1,-0.16)), n=1000)
+acf(AR2, 50)
+pacf(AR2, 50)
+```
+
+3.  Calculate the theoretical ACF and PACF of the AR(2) model
+$$
+X_t=X_{t-1} - 0.16 X_{t-2} + \mathcal{W}_{t} 
+$$
+```{r ARMA3}
+ACF4AR2 <- ARMAacf(ar=c(1,-0.16), ma=0, 50)
+plot(ACF4AR2, type="h")
+abline(h=0)
+PACF4AR2 <- ARMAacf(ar=c(1,-0.16), ma=0, 50, pacf=TRUE)
+plot(PACF4AR2, type="h")
+abline(h=0)
+```
+
+4.  Find the roots of the AR polynomial for the AR(2) model
+$$
+X_t=X_{t-1} - 0.16 X_{t-2} + \mathcal{W}_{t} 
+$$
+```{r ARMA4}
+z <- c(1,-1,0.16)
+Roots <- polyroot(z)
+Roots
+```
+
+5.  Find the theoretical autocorrelation function of the AR(2) model
+$$
+X_t=X_{t-1} - 0.16 X_{t-2} + \mathcal{W}_{t} 
+$$
+explicitly.
+```{r ARMA5}
+A <- matrix(nrow = 2, ncol = 2)
+A[,1] <- c(1,1.25)
+A[,2] <- c(1,5)
+B <- c(1, 1/1.16)
+Sol <- solve(A,B)
+Sol
+```
+
+6. Based on the results of Item 5, calculate  the ACF in lags 1 and 12 and  compare them  with ACF4AR2:
+
+```{r ARMA6}
+Sol[1]*1.25^(-1)+Sol[2]*5^(-1)
+ACF4AR2[2]
+Sol[1]*1.25^(-12)+Sol[2]*5^(-12)
+ACF4AR2[13]
+```
+
+7.  Load the 'ASTSA' package.
+```{r ARMA7, eval=FALSE}
+require(astsa)  
+```
+
+8.  Plot the Recruitment time series:
+```{r ARMA8}
+plot.ts(rec)
+```
+
+9.  Plot the sample ACF and PACF of the Recruitment time series in 25 lags:
+```{r ARMA9}
+acf(rec,25)
+pacf(rec,25)
+```
+
+10.  Fit an AR(2) to the Recruitment time series:
+```{r ARMA10}
+fit <- arima(rec, c(2,0,0))
+fit$coef
+fit2 <- arima(rec, c(2,0,0), include.mean = FALSE)
+fit2$coef
+fit$aic
+fit2$aic
+```
+
+11.  Calculate the p-value of the estimated coefficients:
+```{r ARMA11}
+sarima(rec,2,0,0)
+```
+
+12.  Analyse the residuals:
+```{r ARMA12}
+tsdiag(fit)
+```
+
+13.  Forecast the next three values of the time series:
+```{r ARMA13, fig.height=15}
+predict(fit, 3)
+```
+
+14.  Over fitting:
+
+```{r ARMA14a, fig.height=15}
+sarima(rec, 3,0,0)
+```
+```{r ARMA14b, fig.height=15}
+sarima(rec, 2,0,1)
+```
+
+15.  Plot the time series vs. the fitted model:
+```{r ARMA15}
+RecData <- ts.intersect(rec, rec1=lag(rec,-1), rec2=lag(rec,-2))
+fit <- lm(rec~rec1+rec2, data=RecData, na.action=NULL)
+summary(fit)
+fit2 <- lm(rec[3:453]~rec[2:452]+rec[1:451])
+summary(fit2)
+ts.plot(cbind(rec[3:453], fitted(fit)), col=c(1,4))
+```
+
+### 2  Assignment 5: R Coding
+#### Submission:
+You should email your R-code to `Ali.Eshragh@newcastle.edu.au' by Sunday, October 23, 11:55pm.  Write your full name and student ID No.  on the top of your code and your  file name must be your complete surname.
+
+1.  Find  the  theoretical  autocorrelation  function  of  the   first  AR  model  given  on  the  top  of  Slide 40, Lecture Slides Chapter 3, explicitly, and compare its value in lag 5 with the corresponding output of ARMAacf.
+
+The three models are:
+
+$$
+X_t= 0.7X_{t-1} - 0.12 X_{t-2} + \mathcal{W}_{t}
+$$
+```{r Ass51}
+z <- c(1,-0.7,0.12)
+Roots <- polyroot(z)
+Roots
+```
+
+```{r Ass52}
+A <- matrix(nrow = 2, ncol = 2)
+A[,1] <- c(1,2.5)
+A[,2] <- c(1,10/3)
+B <- c(1, 1/1.12)
+Sol <- solve(A,B)
+Sol
+```
+```{r Ass53}
+Sol[1]*2.5^(-5)+Sol[2]*(10/3)^(-5)
+
+ACF4AR2[6]
+```
+
+2.  Plot the theoretical and sample PACF of all three AR models given in Slide 40, Lecture Slides Chapter 3.
+$$
+X_t= 0.7X_{t-1} - 0.12 X_{t-2} + \mathcal{W}_{t} \\
+X_t= X_{t-1} - 0.25 X_{t-2} + \mathcal{W}_{t} \\
+X_t= 1.5X_{t-1} - 0.75 X_{t-2} + \mathcal{W}_{t}
+$$
+
+```{r Ass5Q2}
+PACF4AR2 <- ARMAacf(ar=c(0.7,-0.12), ma=0, 50, pacf=TRUE)
+plot(PACF4AR2, type="h")
+abline(h=0)
+AR2 <- arima.sim(list(order=c(2,0,0), ar=c(0.7,-0.12)), n=1000)
+pacf(AR2, 50)
+
+
+PACF4AR2 <- ARMAacf(ar=c(1,-0.25), ma=0, 50, pacf=TRUE)
+plot(PACF4AR2, type="h")
+abline(h=0)
+AR2 <- arima.sim(list(order=c(2,0,0), ar=c(1,-0.25)), n=1000)
+pacf(AR2, 50)
+
+
+PACF4AR2 <- ARMAacf(ar=c(1.5,-0.75), ma=0, 50, pacf=TRUE)
+plot(PACF4AR2, type="h")
+abline(h=0)
+AR2 <- arima.sim(list(order=c(2,0,0), ar=c(1.5,-0.75)), n=1000)
+pacf(AR2, 50)
+```
+
+### References
+R.H. Shumway and D.S. Stoffer,
+Time Series Analysis and Its Applications With R Examples, Springer, New York, 2010.
