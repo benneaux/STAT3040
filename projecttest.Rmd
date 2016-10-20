@@ -1,0 +1,27 @@
+---
+title: "STAT3040 : Time Series Analysis 2016 Assignment 5"
+output: html_notebook
+---
+
+```{r setup, include = FALSE}
+require(broom)
+require(astsa)
+require(knitr)
+require(tidyr)
+require(magrittr)
+require(ggfortify)
+require(ggplot2)
+require(ggthemes)
+knitr::opts_chunk$set(echo = FALSE, collapse = TRUE, fig.align="center", fig.width=15, fig.height = 7.5)
+```
+
+
+```{r data}
+data <- read.csv(paste0(getwd(),"/Data/gflutrends.txt"), header = TRUE, sep = ",")
+```
+
+```{r plot}
+plot(data[,"Queensland"], type='l')
+lines(data[,"Australia"], col="blue")
+lines(data[,"New.South.Wales"], col="red")
+```
