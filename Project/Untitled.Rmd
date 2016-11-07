@@ -1,0 +1,125 @@
+---
+title: "STAT3040 Group Report"
+author: "Benjamin Moran"
+date: "7 November 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+require(astsa)
+require(broom)
+opts_chunk$set(collapse = TRUE, fig.align="center")
+opts_chunk$set(cache = TRUE, echo = FALSE)
+CItestfunc <- function( # Calcs if 95% of acf/pacf within blue CI bars.
+  x,
+  cnf.int = qnorm({1 + 0.95}/2)/sqrt(as.integer(length(x)))) { 
+ans <- mean(abs(x)<cnf.int)
+ans2 <- ifelse(ans<0.95,"No","Yes")
+print(ans)
+print(ans2)
+}
+```
+
+```{r data, include=FALSE}
+fludata <- read.csv("Data/fludata3.csv", header=TRUE)
+x <- fludata$ILI_Unvaccinated
+pr.ix <- which.min(x); x[pr.ix]
+x[pr.ix] <- {x[pr.ix-3] + 2*x[pr.ix-2] + 3*x[pr.ix-1] + 3*x[pr.ix+1] + 2*x[pr.ix+2] + x[pr.ix+3]}/12
+```
+
+## Introduction
+
+Flutracking (http://www.flutracking.net/) is an online health surveillance system to detect epidemics of influenza. Weekly reports are published showing survey statistics, including respondent numbers for the week, and indicate rates of Influenza-Like Illness (ILI) symptoms in Australia and also in individual states where there is a sufficient sample size of respondents.
+We have a record of what percentage of Flutracking survey respondents each week report having ILI symptoms. This proportion tends to range between 1% and 5% of survey respondents. The data we have covers a 4 year period (2012-2016), and is only collected during the flu season each year (a 23 week period from May to October). The data are stratified by whether or not respondents are vaccinated.
+
+## Objective
+
+Ideally, we'd like to see if we can predict how many unvaccinated people in Australia are going catch the flu in the coming weeks and months (because this number is of greater interest to epidemiologists working in the short-term). However, we only have data from survey respondents (around 22,000 respondents a week as of October 2016), which is very likely not representative of the population of Australia as a whole. In addition, and most crucially, we don't actually know whether or not they have the flu; all that gets reported is whether or not they have ILI symptoms (i.e. fever and cough).
+Our objective, then, is to construct a model that predicts the proportion of unvaccinated respondents with ILI symptoms.
+
+## Method
+
+Mention the weighted-averaging to fix the weird data point.
+
+Blah blah original timeseries
+```{r plotTS1}
+plot.ts(x)
+x.acf <- acf2(x, length(x)-1)
+CItestfunc(x.acf[,1]);CItestfunc(x.acf[,2])
+```
+
+blah blah differenced timeseries
+
+```{r plotTS1}
+Dx <- diff(x)
+plot.ts(Dx)
+dx.acf <- acf2(Dx, length(x)-2)
+CItestfunc(dx.acf[,1]);CItestfunc(dx.acf[,2])
+```
+
+
+## Results
+
+### SARIMA
+```{r sarima, results="hide", warning=FALSE}
+sarima.model <- sarima(x, p=6, d=1, q=5, P=0, D=1, Q=1, S=23)
+```
+```{r sarimafit}
+sarima.model$ttable
+sarima.model$fit
+```
+
+### Predictions
+
+```{r fitunvaccinated}
+n <- 23
+fit2b <- sarima.for(x[1:(length(x)-n)], n.ahead=n, p=6, d=1, q=5, P=0, D=1, Q=1, S=23)
+lines(x)
+```
+Do the actual 114th and 115th values of the time series lie within the 95%
+bounds of our predicted 114th and 115th values? (Make this look nicer)
+```{r predunvaccinated}
+out <- matrix(data = NA, nrow=10, ncol=3)
+for(i in 1:10){
+out[i,] <- c(predict(fit2, 10)$pred[i]-predict(fit2, 10)$se[i], x[i+105], predict(fit2, 10)$pred[i]+predict(fit2, 10)$se[i])
+}
+out
+```
+
+```{r predplot}
+plot.ts(x, ylim=c(0, 0.06)) #Label title and axes
+lines(c(106:115), as.numeric(predict(fit2, 10)$pred), col="red")
+lines(c(106:115), as.numeric(predict(fit2, 10)$pred-predict(fit2, 10)$se), col="red", lty="dashed")
+lines(c(106:115), as.numeric(predict(fit2, 10)$pred+predict(fit2, 10)$se), col="red", lty="dashed")
+legend("topright", legend=c("Actual", "Predicted"), lty=1, col=1:2, bty="n")
+```
+## Conclusions
+```{r 26}
+fit5 <- arima(x[1:95], c(1,1,0), seasonal = list(order=c(0,1,1), period=23))
+predict(fit5, 20)
+x[96:115]
+```
+
+Do the actual 114th and 115th values of the time series lie within the 95%
+bounds of our predicted 114th and 115th values? (Make this look nicer)
+```{r 27}
+out <- matrix(data = NA, nrow=20, ncol=3)
+for(i in 1:20){
+out[i,] <- c(predict(fit5, 20)$pred[i]-predict(fit5, 20)$se[i], x[i+95], predict(fit5, 20)$pred[i]+predict(fit5, 20)$se[i])
+}
+out
+```
+
+Yes (above shows the lower CI, actual value, upper CI)
+Plotting actual vs predicted:
+```{r 28}
+plot.ts(x, ylim=c(0, 0.06)) #Label title and axes
+lines(c(96:115), as.numeric(predict(fit5, 20)$pred), col="red")
+lines(c(96:115), as.numeric(predict(fit5, 20)$pred-predict(fit5, 20)$se), col="red", lty="dashed")
+lines(c(96:115), as.numeric(predict(fit5, 20)$pred+predict(fit5, 20)$se), col="red", lty="dashed")
+legend("topright", legend=c("Actual", "Predicted"), lty=1, col=1:2, bty="n")
+```
+
+## Reference
+

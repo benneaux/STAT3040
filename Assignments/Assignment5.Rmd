@@ -1,0 +1,88 @@
+---
+title: 'STAT3040 : Time Series Analysis 2016 Assignment 5'
+output:
+  html_document: default
+  html_notebook: default
+---
+
+```{r setup, include = FALSE}
+require(broom)
+require(astsa)
+require(knitr)
+require(tidyr)
+require(magrittr)
+require(ggfortify)
+require(ggplot2)
+require(ggthemes)
+knitr::opts_chunk$set(echo = FALSE, collapse = TRUE, fig.align="center", fig.width=15, fig.height = 7.5)
+```
+
+### Question 1
+
+Show that the AR(1) model
+$$
+X_t = \phi X_{t-1} + \mathcal{W}_t,
+$$
+with $\mid \phi \mid > 1$, is stationary.
+
+*Stationary Defn'.*:  
+
+> A weakly stationary time series, $x_t$, is a finite variance process such that
+>  
+>  (i) the mean value function, $\mu_t$, defined in (1.9) is constant and does not depend on time *t*, and
+>  (ii) the autocovariance function, $\gamma(s, t)$, defined in (1.10) depends on *s* and *t* only through their difference $\mid s - t \mid$.
+
+### Bonus Question 1 page 96
+
+Consider the AR(2) process
+
+$$
+X_t = \phi_{_1} X_{t-1} + \phi_{_2} X_{t-2} \mathcal{W}_t,
+$$
+
+where $\phi_2 \neq 0$. Show that the AR(2) model is causal iff
+
+$$
+\phi_{_2} + \phi_{_1} < 1,\quad \phi_{_2} - \phi_{_1} < 1,\quad \text{and}\quad \phi_{_2} > -1.
+$$
+
+*Causal defn'*: 
+
+> When a process does not depend on the future, such as the AR(1) when $\mid \phi \mid < 1$, we will say the process is causal.
+
+> An AR(2) model $\phi(z)$ is causal when the two roots of  $\phi(z) = a + \phi_{_1} z + \phi_{_2} z^2$ lie outside of the unit circle.
+
+### Bonus Question 2
+
+**Consider** the ARMA(1,1) model
+$$
+X_t = \phi_{_1} X_{t-1} + \mathcal{W}_t + \theta \mathcal{W}_{t-1},
+$$
+
+where $\mid \phi \mid < 1$. Show that the **autocorrelation** function is given by
+
+$$
+\rho_{_X}(h)=\frac{(1+\theta\phi)(\phi + \theta)}{1 + 2\theta\phi + \theta^2}\phi^{h-1} \quad \text{for} \quad h \geq 1.
+$$
+
+*ACF defn'*:
+
+> The autocorrelation function (ACF) of a stationary time series will be written using (1.14) as
+$$\rho(h) = \frac{\gamma(t+h,t)}{\sqrt{\gamma(t + h, t + h) \gamma(t, t)}} = \frac{\gamma(h)}{\gamma(0)}$$
+The Cauchy–Schwarz inequality shows again that  $-1\leq\rho(h)\leq 1$ for all *h*, enabling one to assess the relative importance of a given autocorrelation value by comparing with the extreme values -1 and 1.
+
+### Bonus Question 3
+
+Consider the **stationary** process $\left\{ X_t; t = 0,\pm 1,\pm 2,\dots \right\}$ with mean zero.
+**Show** that
+
++ If
+$$
+\widehat{X}_{t+h} = \beta_{_1}{X}_{t+h-1} + \beta_{_2}{X}_{t+h-2} + \dots + \beta_{h-1}{X}_{t+1}, 
+$$
+**then**
+$$
+\widehat{X}_{t} = \beta_{_1}{X}_{t+1} + \beta_{_2}{X}_{t+2} + \dots + \beta_{h-1}{X}_{t+h-1}, 
+$$
+
++ Both $X_{t+h} - \widehat{X}_{t+h}$ and $X_{t} - \widehat{X}_{t}$ are **uncorrelated** with $\left\{ X_{t+1}, \dots, X_{t+h-1} \right\}$.

@@ -1,6 +1,8 @@
 ---
-title: "STAT3040 : Time Series Analysis 2016 Computer Lab. 9 - Week 10"
-output: html_notebook
+title: 'STAT3040 : Time Series Analysis 2016 Computer Lab. 9 - Week 10'
+output:
+  html_notebook: default
+  html_document: default
 ---
 
 ```{r setup, include = FALSE}
@@ -12,7 +14,7 @@ require(magrittr)
 require(ggfortify)
 require(ggplot2)
 require(ggthemes)
-knitr::opts_chunk$set(echo = FALSE, collapse = TRUE, fig.align="center", fig.width=15, fig.height = 7.5)
+knitr::opts_chunk$set(echo = FALSE, collapse = TRUE, fig.align="center")
 ```
 
 ### 1.  ARMA Models in R
@@ -55,7 +57,7 @@ X_t=X_{t-1} - 0.16 X_{t-2} + \mathcal{W}_{t}
 $$
 ```{r ARMA4}
 z <- c(1,-1,0.16)
-Roots <- polyroot(z)
+Roots <- Re(polyroot(z))
 Roots
 ```
 
@@ -66,8 +68,8 @@ $$
 explicitly.
 ```{r ARMA5}
 A <- matrix(nrow = 2, ncol = 2)
-A[,1] <- c(1,1.25)
-A[,2] <- c(1,5)
+A[,1] <- c(1,Roots[1])
+A[,2] <- c(1,Roots[2])
 B <- c(1, 1/1.16)
 Sol <- solve(A,B)
 Sol
@@ -76,8 +78,13 @@ Sol
 6. Based on the results of Item 5, calculate  the ACF in lags 1 and 12 and  compare them  with ACF4AR2:
 
 ```{r ARMA6}
-Sol[1]*1.25^(-1)+Sol[2]*5^(-1)
+# lag 1
+Sol[1]*Roots[1]^(-1)+Sol[2]*Roots[2]^(-1)
+# lag -1
+Sol[1]*1.25^(1)+Sol[2]*5^(1)
+# lag 1
 ACF4AR2[2]
+# lag 12
 Sol[1]*1.25^(-12)+Sol[2]*5^(-12)
 ACF4AR2[13]
 ```
@@ -142,65 +149,7 @@ summary(fit2)
 ts.plot(cbind(rec[3:453], fitted(fit)), col=c(1,4))
 ```
 
-### 2  Assignment 5: R Coding
-#### Submission:
-You should email your R-code to `Ali.Eshragh@newcastle.edu.au' by Sunday, October 23, 11:55pm.  Write your full name and student ID No.  on the top of your code and your  file name must be your complete surname.
 
-1.  Find  the  theoretical  autocorrelation  function  of  the   first  AR  model  given  on  the  top  of  Slide 40, Lecture Slides Chapter 3, explicitly, and compare its value in lag 5 with the corresponding output of ARMAacf.
-
-The three models are:
-
-$$
-X_t= 0.7X_{t-1} - 0.12 X_{t-2} + \mathcal{W}_{t}
-$$
-```{r Ass51}
-z <- c(1,-0.7,0.12)
-Roots <- polyroot(z)
-Roots
-```
-
-```{r Ass52}
-A <- matrix(nrow = 2, ncol = 2)
-A[,1] <- c(1,2.5)
-A[,2] <- c(1,10/3)
-B <- c(1, 1/1.12)
-Sol <- solve(A,B)
-Sol
-```
-```{r Ass53}
-Sol[1]*2.5^(-5)+Sol[2]*(10/3)^(-5)
-
-ACF4AR2[6]
-```
-
-2.  Plot the theoretical and sample PACF of all three AR models given in Slide 40, Lecture Slides Chapter 3.
-$$
-X_t= 0.7X_{t-1} - 0.12 X_{t-2} + \mathcal{W}_{t} \\
-X_t= X_{t-1} - 0.25 X_{t-2} + \mathcal{W}_{t} \\
-X_t= 1.5X_{t-1} - 0.75 X_{t-2} + \mathcal{W}_{t}
-$$
-
-```{r Ass5Q2}
-PACF4AR2 <- ARMAacf(ar=c(0.7,-0.12), ma=0, 50, pacf=TRUE)
-plot(PACF4AR2, type="h")
-abline(h=0)
-AR2 <- arima.sim(list(order=c(2,0,0), ar=c(0.7,-0.12)), n=1000)
-pacf(AR2, 50)
-
-
-PACF4AR2 <- ARMAacf(ar=c(1,-0.25), ma=0, 50, pacf=TRUE)
-plot(PACF4AR2, type="h")
-abline(h=0)
-AR2 <- arima.sim(list(order=c(2,0,0), ar=c(1,-0.25)), n=1000)
-pacf(AR2, 50)
-
-
-PACF4AR2 <- ARMAacf(ar=c(1.5,-0.75), ma=0, 50, pacf=TRUE)
-plot(PACF4AR2, type="h")
-abline(h=0)
-AR2 <- arima.sim(list(order=c(2,0,0), ar=c(1.5,-0.75)), n=1000)
-pacf(AR2, 50)
-```
 
 ### References
 R.H. Shumway and D.S. Stoffer,

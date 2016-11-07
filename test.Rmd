@@ -4,7 +4,11 @@ author: "N. Della; T. McCallum; B. Moran"
 ---
 ```{r setup, include = FALSE}
 library(astsa)
+<<<<<<< HEAD
 file.loc <- "fludata3.csv"
+=======
+file.loc <- "Project/Data/fludata3.csv"
+>>>>>>> 811ea1dd48e5fb956296e55d551b195ab2558fe9
 fludata <- read.csv(file.loc, header=TRUE)
 knitr::opts_chunk$set(cache = TRUE, fig.height = 6, fig.width = 12, echo = FALSE)
 CItestfunc <- function( # Calcs if 95% of acf/pacf within blue CI bars.
@@ -16,6 +20,11 @@ print(ans)
 print(ans2)
 }
 ```
+<<<<<<< HEAD
+=======
+\twocolumns
+
+>>>>>>> 811ea1dd48e5fb956296e55d551b195ab2558fe9
 ```{r label, options}
 x <- fludata$ILI_Unvaccinated
 pr.ix <- which.min(x); x[pr.ix]
