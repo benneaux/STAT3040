@@ -1,0 +1,57 @@
+---
+title: "STAT3040 Group Report"
+author: "N. Della; T. McCallum; B. Moran"
+date: "1 November 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Introduction
+
+Here's some data collected from Flutracking. We also have data from Google Trends.
+
+## Objective
+
+Ideally, we'd like to see if we can predict how many people are going get the flu.
+However, we only have data from these survey respondents, and (crucially) we don't
+actually know whether or not they have the flu; all that gets reported is whether
+or not they have flu-related symptoms (i.e. fever and cough).
+
+The data we are looking at is specifically for unvaccinated survey respondents.
+(NB: We might as well look at the other columns too to fill out our poster).
+We have a record of what percentage of survey respondents each week report having
+flu-related symptoms. This proportion tends to range between 1% and 5% of survey
+respondents. The data we have covers a 4 year period (2012-2016), and is only
+collected during the flu season each year (a 23 week period from May to October).
+This info should probably be in the introduction.
+
+## Method
+
+Here is our model
+
+## Results
+
+This is how good our model is
+
+## Conclusion
+
+We found a model. Compare models found for unvaccinated and vaccinated respondents perhaps.
+Our model predicts the percentage of survey respondents with flu-like symptoms: but, is this
+a good indicator for the actual percentage of the population who have the flu? We don't
+have a way to link the survey response data to actual flu data: more people may report flu-
+like symptoms, but does this mean that more people have the flu? It can be argued that
+yes, more people with flu-like symptoms does indicate that more people have the flu.
+
+Our model merely predicts the percentage of respondents who report flu-like symptoms;
+it could be used to further predict how many people will actually have the flu, but keep
+in mind that this requires assumptions that we have not made. Assumptions such as:
+1. Survey respondents are representative of the population in general. 2. Flu-like symptoms
+is directly related to actually having the flu. maybe lots of people report flu-like symptoms,
+but most only have a common cold. The proportion of people with a cold could be increasing,
+but the proportion of people with the flu could be holding steady or even decreasing, and
+our model will show that the proportion of people with flu-like symptoms is increasing.
+
+Another thing to note is that we only have data during the flu season (May to October).
+We can't say anything about trends during the rest of the year.

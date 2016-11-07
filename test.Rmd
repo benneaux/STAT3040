@@ -1,0 +1,234 @@
+---
+title: "STAT3040 Group Work"
+author: "N. Della; T. McCallum; B. Moran"
+---
+```{r setup, include = FALSE}
+library(astsa)
+file.loc <- "fludata3.csv"
+fludata <- read.csv(file.loc, header=TRUE)
+knitr::opts_chunk$set(cache = TRUE, fig.height = 6, fig.width = 12, echo = FALSE)
+CItestfunc <- function( # Calcs if 95% of acf/pacf within blue CI bars.
+  x,
+  cnf.int = qnorm({1 + 0.95}/2)/sqrt(as.integer(length(x)))) { 
+ans <- mean(abs(x)<cnf.int)
+ans2 <- ifelse(ans<0.95,"No","Yes")
+print(ans)
+print(ans2)
+}
+```
+```{r label, options}
+x <- fludata$ILI_Unvaccinated
+pr.ix <- which.min(x); x[pr.ix]
+x[pr.ix] <- {x[pr.ix-3] + 2*x[pr.ix-2] + 3*x[pr.ix-1] + 3*x[pr.ix+1] + 2*x[pr.ix+2] + x[pr.ix+3]}/12
+x[pr.ix]
+plot.ts(x)
+```
+
+Not stationary (why?), so difference by 1 lag.
+```{r 2}
+Dx <- diff(x)
+plot.ts(Dx)
+```
+
+And if we difference by 2 lags:
+```{r 3}
+D2x <- diff(x, differences=2)
+plot.ts(D2x)
+```
+
+Plot ACF and PACF
+```{r 4}
+Dxacf <- acf2(Dx, 100)
+CItestfunc(Dxacf[,1])
+CItestfunc(Dxacf[,2])
+D2xacf <- acf2(D2x, 100)
+CItestfunc(D2xacf[,1])
+CItestfunc(D2xacf[,2])
+```
+
+Let's try different ARMA(p,q) models for Dx:
+
+```{r 5}
+sarima(x, 16,1,1) # AICc = -9.846757
+```
+
+Looking at the ACF for Dx, we note that there does appear to be seasonality.
+Each flu season has 23 weeks, and we observe spikes in the ACF every 23 weeks.
+So let's try to account for seasonality.
+
+```{r 6}
+D23x <- diff(Dx, 23)
+plot.ts(D23x)
+D23xacf <- acf2(D23x, 90)
+CItestfunc(D23xacf[,1])
+CItestfunc(D23xacf[,2])
+```
+
+Let's try to fit a SARIMA model for D23x:
+Using good/bad to say whether final coefficients are significant. i.e. if the model is arima(2,1,3), I only need the AR(2) and MA(3) coefficients to be significant. Also, for better reasoning on choosing p,d,q,P,D,Q,S, look further down the page for where we fit a model to the data from vaccinated respondents.
+
+```{r 7}
+sarima(x, 18,1,5, P=0, D=1, Q=1, S=23) # Very good
+```
+
+The very good model was best.
+```{r 10}
+fit <- arima(x, c(17,1,5), seasonal = list(order=c(0,1,1), period=23))
+predicted <- predict(fit, 10) # Probably predict less than 10 ahead. Can't check these anyway
+predicted
+```
+
+Let's try to fit a model omitting the final 2 values, then predict the next
+2 values and compare to the actual ones
+
+```{r 11}
+fit2 <- arima(x[1:110], c(17,1,5), seasonal = list(order=c(0,1,1), period=23))
+predict(fit2, 5)
+x[111:115]
+```
+Do the actual 114th and 115th values of the time series lie within the 95%
+bounds of our predicted 114th and 115th values? (Make this look nicer)
+```{r 12}
+out <- matrix(data = NA, nrow=5, ncol=3)
+for(i in 1:5){
+out[i,] <- c(predict(fit2, 5)$pred[i]-1.96*predict(fit2, 5)$se[i], x[i+110], predict(fit2, 5)$pred[i]+1.96*predict(fit2, 5)$se[i])
+}
+out
+```
+Yes (above shows the lower CI, actual value, upper CI)
+Plotting actual vs predicted:
+
+```{r 13}
+plot.ts(x, ylim=c(0, 0.06)) #Label title and axes
+lines(c(111:115), as.numeric(predict(fit2, 5)$pred), col="red")
+lines(c(111:115), as.numeric(predict(fit2, 5)$pred-1.96*predict(fit2, 5)$se), col="red", lty="dashed")
+lines(c(111:115), as.numeric(predict(fit2, 5)$pred+1.96*predict(fit2, 5)$se), col="red", lty="dashed")
+legend("topright", legend=c("Actual", "Predicted"), lty=1, col=1:2, bty="n")
+```
+
+As you can see from this plot, the next two values the time series (red line) predictsare very close to the actual values (black line). Certainly, the actual values lie well within the 95% confidence bounds (dotted red lines).
+
+Note: We can also predict value for Oct 16, 2016, which we have the data for but
+omitted so that we had 23 weeks per season.
+
+### Pre-whitening: (NB: This did not work. Do we still include? Maybe in report, not poster.)
+Let's take a look at the Google Trends data:
+
+```{r 14}
+y <- fludata$Vaccination_Search
+plot.ts(y)
+```
+
+Not stationary. Try differencing.
+```{r 15}
+Dy <- diff(y)
+plot.ts(Dy)
+```
+
+Fit an ARMA model to the differenced data.
+```{r 16}
+Dyacf <- acf2(Dy, 113)
+CItestfunc(Dyacf[,1])
+CItestfunc(Dyacf[,1])
+
+sarima(y, 2,1,2, no.constant = TRUE) #Yep, AICc = 2.527995
+sarima(y, 2,1,0, no.constant = TRUE) #Yep, AICc = 2.599798
+```
+
+Similar AICc, but we want a model with no MA terms. So use the 2nd.
+```{r 17}
+fit3 <- arima(y, c(2,1,0))
+fit3$coef
+```
+
+Filter the time series x using the model for y
+```{r 18}
+pwx <- filter(x, filter = c(1,-fit3$coef[2]), sides = 1)
+pwy <- fit3$residuals
+ccf(pwy, pwx, na.action=na.omit)
+```
+
+Google Trends and Flutracking data do not appear to be correlated, so we shouldn't use the Google Trends data to predict the Flutracking data.
+
+We should also try fitting a model to the vaccinated survey respondents (i.e. % ofvaccinated survey respondents who report flu-related symptoms during a given week).
+
+```{r 19}
+z <- fludata$ILI_Vaccinated
+pr.iz <- which.min(z); z[pr.iz]
+z[pr.iz] <- {z[pr.iz-3] + 2*z[pr.ix-2] + 3*z[pr.iz-1] + 3*z[pr.iz+1] + 2*z[pr.iz+2] + z[pr.iz+3]}/12
+z[pr.iz]
+plot.ts(z)
+```
+
+Not stationary (why?), so difference by one lag
+```{r 20}
+Dz <- diff(z)
+plot.ts(Dz)
+```
+
+There is an outlier. Difference by 2 lags?
+```{r 21}
+D2z <- diff(z, differences = 2)
+plot.ts(D2z)
+```
+
+Same outlier. We will use Dz for now, but this is bad.
+```{r 22}
+Dzacf <- acf2(Dz, 100)
+CItestfunc(Dzacf[,1])
+CItestfunc(Dzacf[,2])
+```
+
+There is still a seasonal effect every 23 weeks. So let's account for seasonality.
+```{r 23}
+D23z <- diff(Dz, 23)
+D23zacf <- acf2(D23z, 90)
+CItestfunc(D23zacf[,1])
+CItestfunc(D23zacf[,2])
+```
+
+Looking at the seasons (every 23 lags), the ACF has a spike at 23 (i.e. Q=1). We can say either the ACF tails off, in which case we can choose a value for P (say P=1, as there is a spike in the PACF at 23); or we can say the ACF cuts off, in which case P=0 by definition. Looking within each 23 week season, we can say that: the ACF cuts off at 1 (q=1 & p=0); we can say the ACF trails off with a spike at 1 and the PACF trails off with a spike at 1 (q=1 & p=1); we can say that the PACF cuts off at 1 (p=1 & q=0). Also consider possible spikes in the ACF and PACF at lag 9.
+
+Cases where P=0 and Q=1
+```{r 24}
+sarima(z, p=0, d=1, q=1, P=0, D=1, Q=1, S=23) #Good, AICc = -10.63721
+sarima(z, p=1, d=1, q=0, P=0, D=1, Q=1, S=23) #Good, AICc = -10.67432. Also has an AR term instead of an MA term, which is good.
+```
+
+Cases where P=1 and Q=1
+```{r 25}
+fit4 <- arima(z, c(1,1,0), seasonal=list(order=c(0,1,1), period=23))
+predicted2 <- predict(fit4, 10) # Probably predict less than 10 ahead. Can't check these anyway
+predicted2
+```
+
+Let's try to fit a model omitting the final 2 values, then predict the next
+2 values and compare to the actual ones
+
+```{r 26}
+fit5 <- arima(z[1:95], c(1,1,0), seasonal = list(order=c(0,1,1), period=23))
+predict(fit5, 20)
+z[96:115]
+```
+
+Do the actual 114th and 115th values of the time series lie within the 95%
+bounds of our predicted 114th and 115th values? (Make this look nicer)
+```{r 27}
+out <- matrix(data = NA, nrow=20, ncol=3)
+for(i in 1:20){
+out[i,] <- c(predict(fit5, 20)$pred[i]-1.96*predict(fit5, 20)$se[i], z[i+95], predict(fit5, 20)$pred[i]+1.96*predict(fit5, 20)$se[i])
+}
+out
+```
+
+Yes (above shows the lower CI, actual value, upper CI)
+Plotting actual vs predicted:
+```{r 28}
+plot.ts(z, ylim=c(0, 0.06)) #Label title and axes
+lines(c(96:115), as.numeric(predict(fit5, 20)$pred), col="red")
+lines(c(96:115), as.numeric(predict(fit5, 20)$pred-1.96*predict(fit5, 20)$se), col="red", lty="dashed")
+lines(c(96:115), as.numeric(predict(fit5, 20)$pred+1.96*predict(fit5, 20)$se), col="red", lty="dashed")
+legend("topright", legend=c("Actual", "Predicted"), lty=1, col=1:2, bty="n")
+```
+
+As you can see from this plot, the next two values the time series (red line) predicts are close to the actual values (black line). The predicted values are slighly lower than expected, but the actual values do lie within the 95% confidence bounds (dotted red lines).
