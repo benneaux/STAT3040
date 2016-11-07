@@ -1,6 +1,8 @@
 ---
-title: "STAT3040 : Time Series Analysis 2016 Assignment 5"
-output: html_notebook
+title: 'STAT3040 : Time Series Analysis 2016 Assignment 5'
+output:
+  html_document: default
+  html_notebook: default
 ---
 
 ```{r setup, include = FALSE}

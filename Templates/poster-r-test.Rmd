@@ -1,0 +1,53 @@
+---
+title: Thorough research of this special topic regarding the influence of various factors
+author: [N. Della, T. McCallum, B. Moran]
+institute: School of Science & I.T., UoN
+longinstitute: School of Science and Information Technology, University of Newcastle
+web: 'newcastle.edu.au'
+posteroptions: width=90,height=110,scale=1.2 #,grid
+headerheight: 13cm
+# large, Large, LARGE, huge, Huge, veryHuge, VeryHuge, VERYHuge
+titlefont: size=\veryHuge,series=\bfseries
+authorfont: size=\huge
+institutefont: size=\Large
+knit: (function(input, encoding, make = TRUE) { source('templates/makefile-renderer.R', local =TRUE) })
+---
+%% smart
+%% to=latex
+%% template=templates/poster.tex
+%% filter=templates/poster-filters.py
+
+```{r packages-and-options, cache=FALSE}
+library('ggplot2')
+library('knitr')
+theme_set(theme_grey(base_size=10))
+knitr::opts_chunk$set(fig.width = 16, fig.height = 4)
+library(astsa)
+file.loc <- "fludata3.csv"
+fludata <- read.csv(file.loc, header=TRUE)
+CItestfunc <- function( # Calcs if 95% of acf/pacf within blue CI bars.
+  x,
+  cnf.int = qnorm({1 + 0.95}/2)/sqrt(as.integer(length(x)))) { 
+ans <- mean(abs(x)<cnf.int)
+ans2 <- ifelse(ans<0.95,"No","Yes")
+print(ans)
+print(ans2)
+}
+```
+\vskip 3cm
+[columns = 2]
+[column]
+Two lines adfaksjd;gadg;skljf;alsdjf;lasdjflkasdl;f afkaskjdf asjdfk alksdjfal; ksdjf ;ajsdf a;lksdjf ;alksjdf ;lakjsdf ;aklsjdf ;lakjsdf akjsd lfkjasdjfajkshgaj; lsdkgjoaidgsha osdljfn aow;ehjfnapoweu sdvn;sodlk v;alkcxnva ;sldnaosd;lksand;lkf jva;mdskvj aosdijg  ds alskjdfl asdj ll  kalsdjf a;sldf as;dlf asdklfasdlkf asdfklasdfjdkf a;lsdkfj alsdjf l;asdlkfjasld;f asjdf dsal;fkdsjf asdjfla ;sdjf asdjfl .
+
+```{r test2}
+x <- fludata$ILI_Unvaccinated
+pr.ix <- which.min(x)
+x[pr.ix] <- {x[pr.ix-3] + 2*x[pr.ix-2] + 3*x[pr.ix-1] + 3*x[pr.ix+1] + 2*x[pr.ix+2] + x[pr.ix+3]}/12
+plot.ts(x)
+```
+
+
+
+Two lines adfaksjd;gadg;skljf;alsdjf;lasdjflkasdl;f afkaskjdf asjdfk alksdjfal; ksdjf ;ajsdf a;lksdjf ;alksjdf ;lakjsdf ;aklsjdf ;lakjsdf akjsd lfkjasdjfajkshgaj; lsdkgjoaidgsha osdljfn aow;ehjfnapoweu sdvn;sodlk v;alkcxnva ;sldnaosd;lksand;lkf jva;mdskvj aosdijg  ds alskjdfl asdj ll  kalsdjf a;sldf as;dlf asdklfasdlkf asdfklasdfjdkf a;lsdkfj alsdjf l;asdlkfjasld;f asjdf dsal;fkdsjf asdjfla ;sdjf asdjfl .
+[/column]
+[/columns]

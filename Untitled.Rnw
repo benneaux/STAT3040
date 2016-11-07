@@ -1,0 +1,25 @@
+\documentclass{article}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+
+smart
+to=latex
+template=templates/poster.tex
+filter=templates/poster-filters.py
+
+
+\vskip 3cm
+
+Two lines adfaksjd;gadg;skljf;alsdjf;lasdjflkasdl;f afkaskjdf asjdfk alksdjfal; ksdjf ;ajsdf a;lksdjf ;alksjdf ;lakjsdf ;aklsjdf ;lakjsdf akjsd lfkjasdjfajkshgaj; lsdkgjoaidgsha osdljfn aow;ehjfnapoweu sdvn;sodlk v;alkcxnva ;sldnaosd;lksand;lkf jva;mdskvj aosdijg  ds alskjdfl asdj ll  kalsdjf a;sldf as;dlf asdklfasdlkf asdfklasdfjdkf a;lsdkfj alsdjf l;asdlkfjasld;f asjdf dsal;fkdsjf asdjfla ;sdjf asdjfl .
+
+
+
+
+Two lines adfaksjd;gadg;skljf;alsdjf;lasdjflkasdl;f afkaskjdf asjdfk alksdjfal; ksdjf ;ajsdf a;lksdjf ;alksjdf ;lakjsdf ;aklsjdf ;lakjsdf akjsd lfkjasdjfajkshgaj; lsdkgjoaidgsha osdljfn aow;ehjfnapoweu sdvn;sodlk v;alkcxnva ;sldnaosd;lksand;lkf jva;mdskvj aosdijg  ds alskjdfl asdj ll  kalsdjf a;sldf as;dlf asdklfasdlkf asdfklasdfjdkf a;lsdkfj alsdjf l;asdlkfjasld;f asjdf dsal;fkdsjf asdjfla ;sdjf asdjfl .
+
+
+
+
+\end{document}

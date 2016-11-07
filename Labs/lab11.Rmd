@@ -26,7 +26,7 @@ knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, fig.align="center", fig.widt
 
 3.	One dificulty is that the CCF is affected by the time series structure of the $X_t$ variable and any `in common' trends the time series $X_t$ and $Y_t$ may have over time.
 
-4.	One strategy for dealing with this di  culty is called pre-whitening. The steps are:
+4.	One strategy for dealing with this difficulty is called pre-whitening. The steps are:
 
     (a)	Determine a time series model for the $X_t$  variable and store the residuals from this model.
     (b)	Filter the $Y_t$ variable series using the $X_t$ variable model (using the estimated coe cients from step (a)). In this step we find differences between observed $Y_t$ values and 'estimated' $Y_t$ values based on the $X_t$ variable model.
@@ -37,15 +37,16 @@ knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, fig.align="center", fig.widt
 x <- arima.sim(list(c(1,0,0), ar=0.8), n=200)
 ```
 
-6.	Generate the time series $Y_t$ = 10 + 0:6$X_t$ 2 + 1:2$X_t$ 4 + Vt where Vt is a Guassian White Noise series with mean zero and variance one:
+6.	Generate the time series $Y_t = 10 + 0.6X_{t-2} + 1.2X_{t-4} + \mathcal{V}_t$ where $\mathcal{V}_t$ is a Guassian White Noise series with mean zero and variance one:
 ```{r Q6}
 z <- ts.intersect(x, lag(x,-2), lag(x,-4)) 
 dim(z)
 y <- 10 + 0.6*z[,2] + 1.2*z[,3] + rnorm(196,0,1)
 ```
 
-7.	Fit an ARIMA model to $X_t$: acf(x)
+7.	Fit an ARIMA model to $X_t$: 
 ```{r Q7}
+acf(x)
 pacf(x)
 fit <- arima(x, c(1,0,0)) 
 fit$coef
@@ -57,7 +58,7 @@ pwy <- filter(y, filter = c(1,-fit$coef[1]), sides = 1)
 head(pwy)
 ```
 
-9.	Plot the cross-correlation function between the residuals of the tted model for the time series $X_t$ and the ltered model for $Y_t$:
+9.	Plot the cross-correlation function between the residuals of the tted model for the time series $X_t$ and the filtered model for $Y_t$:
 ```{r Q9}
 pwx <- fit$residuals 
 ccf(pwx,pwy, na.action=na.omit)
