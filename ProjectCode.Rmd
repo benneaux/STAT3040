@@ -1,0 +1,222 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r packages, include=FALSE}
+library(astsa)
+library(ggplot2)
+library(plyr)
+library(xts)
+library(ggthemes)
+```
+
+```{r xdata, include=FALSE}
+# Read in data
+file.loc <- "fludata3.csv"
+fludata <- read.csv(file.loc, header=TRUE)
+x <- fludata$ILI_Unvaccinated
+pr.ix <- which.min(x); x[pr.ix]
+x[pr.ix] <- {x[pr.ix-3] + 2*x[pr.ix-2] + 3*x[pr.ix-1] + 3*x[pr.ix+1] + 2*x[pr.ix+2] + x[pr.ix+3]}/12
+x[pr.ix]
+y <- seq(1:length(x))
+x.data <- as.data.frame(cbind(x=x,y=y))
+```
+
+```{r rawdata}
+p <- qplot(x = y,y = x) + 
+  geom_line() +
+  scale_x_continuous() +
+  labs(
+    list(
+      x = "Time", 
+      y = "ILI Rate (%)",
+      title = "Self-reported Inluenza-like Illness Rates Amongst Flutracking Survey Participants \n 2012-2016"
+      )
+    ) +
+  theme_hc()
+p
+# Not stationary (why?), so difference by 1 lag.
+```
+
+```{r diff}
+Dx <- diff(x)
+y <- seq(1:length(Dx))
+p <- qplot(x = y,y = Dx) + 
+  geom_line() +
+  scale_x_continuous() +
+  labs(list(x = "Time", 
+            y = "ILI Rate (%)",
+            title = "First Difference of ILI Timeseries \n 2012-2016")) +
+  theme_hc()
+p
+```
+
+
+```{r acf}
+# Plot ACF and PACF
+acf2(Dx, 100)
+acf(Dx,50)
+pacf(Dx,50)
+# Let's try different ARMA(p,q) models for Dx:
+#sarima(x, 17,1,1) # AICc = -9.752886
+#sarima(x, 6,1,1) # AICc -9.854062
+
+# Looking at the ACF for Dx, we note that there does appear to be seasonality.
+# Each flu season has 23 weeks, and we observe spikes in the ACF every 23 weeks.
+# So let's try to account for seasonality.
+```
+```{r 23diff}
+D23x <- diff(Dx, 23)
+
+
+y <- seq(1:length(D23x))
+p <- qplot(x = y,y = D23x) + 
+  geom_line() +
+  scale_x_continuous() +
+  labs(list(x = "Time", 
+            y = "ILI Rate (%)",
+            title = "First Difference of ILI Timeseries \n 2012-2016")) +
+  theme_hc()
+p
+acf(D23x,50)
+pacf(D23x,50)
+acf2(D23x, 90)
+```
+
+```{r 46diff}
+D46x <- diff(Dx, 46)
+
+
+y <- seq(1:length(D46x))
+p <- qplot(x = y,y = D46x) + 
+  geom_line() +
+  scale_x_continuous() +
+  labs(list(x = "Time", 
+            y = "ILI Rate (%)",
+            title = "First Difference of ILI Timeseries \n 2012-2016")) +
+  theme_hc()
+p
+acf2(D46x, 60)
+```
+
+```{r models}
+# Let's try to fit a SARIMA model for D23x:
+#sarima(x, 6,1,5, P=0, D=1, Q=1, S=23) # Very good AICc = -9.975241
+model1 <- sarima(x,p=6,d=1,q=5, P=1, D=0, Q=1, S=23) # Very good AICc = -10.03516
+model1$AICc
+model1$ttable
+plot(resid(model1$fit))
+sarima(x, 6,1,5, P=1, D=1, Q=1, S=23) # Very good AICc = -9.952436
+model2 <- sarima(x, 6,1,5, P=0, D=1, Q=1, S=23) # Very good AICc = -9.895909
+model2$AICc
+model2$ttable
+```
+```{r modelpredict}
+fit <- arima(x, c(6,1,5), seasonal = list(order=c(1,0,1), period=23))
+predicted <- predict(fit, 10) 
+predicted
+```
+
+```{r zdata, include = FALSE}
+# We should also try fitting a model to the vaccinated survey respondents (i.e. % of 
+# vaccinated survey respondents who report flu-related symptoms during a given week).
+z <- fludata$ILI_Vaccinated
+pr.iz <- which.min(z); z[pr.iz]
+z[pr.iz] <- {z[pr.iz-3] + 2*z[pr.iz-2] + 3*z[pr.iz-1] + 3*z[pr.iz+1] + 2*z[pr.iz+2] + z[pr.iz+3]}/12
+z[pr.iz]
+```
+```{r model2}
+plot.ts(z)
+# Not stationary (why?), so difference by one lag
+Dz <- diff(z)
+plot.ts(Dz)
+```
+```{r model2diff}
+# There is an outlier. Difference by 2 lags?
+D2z <- diff(z, differences = 2)
+plot.ts(D2z)
+# Same outlier. We will use Dz for now, but this is bad.
+acf2(Dz, 100)
+# There is still a seasonal effect every 23 weeks. So let's account for seasonality.
+```
+```{r model2diff23}
+D23z <- diff(Dz, 23)
+acf2(D23z, 90)
+# Looking at the seasons (every 23 lags), the ACF has a spike at 23 (i.e. Q=1). We can say
+# either the ACF tails off, in which case we can choose a value for P (say P=1, as there
+# is a spike in the PACF at 23); or we can say the ACF cuts off, in which case P=0 by
+# definition. Looking within each 23 week season, we can say that: the ACF cuts off at 1
+# (q=1 & p=0); we can say the ACF trails off with a spike at 1 and the PACF trails off
+# with a spike at 1 (q=1 & p=1); we can say that the PACF cuts off at 1 (p=1 & q=0).
+# Also consider possible spikes in the ACF and PACF at lag 9.
+# Cases where P=0 and Q=1
+
+sarima(z, p=1, d=1, q=0, P=0, D=1, Q=1, S=23) # Good, AICc = -10.67432. Also has an AR term
+sarima(z, p=1, d=1, q=5, P=0, D=1, Q=1, S=23) # Good, AICc = -10.85298.
+sarima(z, p=1, d=1, q=4, P=0, D=1, Q=1, S=23) # Good, AICc = -10.7144.
+sarima(z, p=3, d=1, q=5, P=0, D=1, Q=1, S=23) # Good, AICc = -10.97626.
+```
+```{r model2fits}
+
+fit4 <- arima(z, c(1,1,5), seasonal=list(order=c(0,1,1), period=23))
+
+predicted2 <- predict(fit4, 10) # Probably predict less than 10 ahead. Can't check these anyway
+predicted2
+
+# Let's try to fit a model omitting the final 10 values, then predict the next
+# 2 values and compare to the actual ones
+fit5 <- arima(z[1:105], c(1,1,0), seasonal = list(order=c(0,1,1), period=23))
+predict(fit5, 10)
+z[106:115]
+# Do the actual 114th and 115th values of the time series lie within the 95%
+# bounds of our predicted 114th and 115th values? (Make this look nicer)
+
+
+c(predict(fit5, 10)$pred[1]-1.96*predict(fit5, 10)$se[1], z[106], predict(fit5, 2)$pred[1]+1.96*predict(fit5, 2)$se[1])
+c(predict(fit5, 5)$pred[2]-1.96*predict(fit5, 5)$se[2], z[115], predict(fit5, 2)$pred[2]+1.96*predict(fit5, 2)$se[2])
+# Yes (above shows the lower CI, actual value, upper CI)
+```
+
+```{r plots}
+# Plotting actual vs predicted:
+plot.ts(z, ylim=c(0, 0.05)) # Label title and axes
+lines(c(106:115), as.numeric(predict(fit5, 10)$pred), col="red")
+lines(c(106:115), as.numeric(predict(fit5, 10)$pred-predict(fit5, 10)$se), col="red", lty="dashed")
+lines(c(106:115), as.numeric(predict(fit5, 10)$pred+predict(fit5,10)$se), col="red", lty="dashed")
+legend("topright", legend=c("Actual", "Predicted"), lty=1, col=1:2, bty="n")
+# As you can see from this plot, the next two values the time series (red line) predicts 
+# are close to the actual values (black line). The predicted values are slighly lower than 
+# expected, but the actual values do lie within the 95% confidence bounds (dotted red lines).
+```
+
+```{r fit2}
+xlags <- 18
+xind <- length(x)-xlags
+predind <- xind+1
+fit2 <- arima(x[1:xind], c(6,1,5), seasonal = list(order=c(1,0,1), period=23))
+
+
+plot.ts(x, 
+        ylim=c(0, 0.06), 
+        main="Predicting Influenza using Flutracking Survey Response Data",
+        xlab = "Time",
+        ylab = "ILI Rate (%)") #Label title and axes
+lines(c(predind:115), as.numeric(predict(fit2, xlags)$pred), col="red")
+lines(c(predind:115), as.numeric(predict(fit2, xlags)$pred-predict(fit2, xlags)$se), col="red", lty="dashed")
+lines(c(predind:115), as.numeric(predict(fit2, xlags)$pred+predict(fit2, xlags)$se), col="red", lty="dashed")
+legend("topright", legend=c("Actual", "Predicted (+/-SE)"), lty=1, col=1:2, bty="n")
+```
+
+```{r fit5}
+zlags <- 14
+zind <- length(z)-zlags
+predind <- zind+1
+fit5 <- arima(z[1:zind], c(1,1,5), seasonal = list(order=c(0,1,1), period=23))
+
+plot.ts(z, ylim=c(0, 0.06)) #Label title and axes
+lines(c(predind:115), as.numeric(predict(fit5, zlags)$pred), col="red")
+lines(c(predind:115), as.numeric(predict(fit5, zlags)$pred-predict(fit5, zlags)$se), col="red", lty="dashed")
+lines(c(predind:115), as.numeric(predict(fit5, zlags)$pred+predict(fit5, zlags)$se), col="red", lty="dashed")
+legend("topright", legend=c("Actual", "Predicted"), lty=1, col=1:2, bty="n")
+```
+
